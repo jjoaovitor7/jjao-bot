@@ -95,29 +95,9 @@ module.exports = async function command(client, message, database) {
   ///
 
   /// COOKIE
-  if (command == "cookie") {
-    const axios = require("axios");
-
-    axios.get('https://helloacm.com/api/fortune/')
-    .then(function (response) {
-      message.channel.send(
-        {
-          embed:
-        {
-          description: ":fortune_cookie: Biscoito da Sorte (em inglês)\n" + response.data,
-          footer: {
-            text: "https://helloacm.com/api/fortune/"
-          }
-        }
-      }
-      );
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-    .then(function () {
-    });
-  }
+  command == "cookie"
+  ? Fun.cookie(message)
+  : null;
   ///
 
   /// CONNECT4
@@ -127,31 +107,10 @@ module.exports = async function command(client, message, database) {
   ///
 
   /// COVIDBRAZIL
-  if (command == "covidbrazilcases") {
-    const axios = require("axios");
-
-    axios
-      .get("https://covid19-brazil-api.now.sh/api/report/v1")
-      .then(function (response) {
-        arrCovid = [];
-        for (let i=0; i < response.data.data.length; i++) {
-          arrCovid.push((response.data.data[i].state + ": " + response.data.data[i].cases + "\n")) ;
-        }
-        message.channel.send({
-          embed: {
-            title: ":syringe: Casos de COVID-19 no Brasil (por estado)",
-            description: arrCovid.sort().join("").toString(),
-            footer: {
-              text: "https://covid19-brazil-api.now.sh/api/report/v1",
-            },
-          },
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () {});
-  }
+  command == "covidbrazilcases"
+  ? Info.covidbrazilcases(message)
+  : null;
+  ///
 
   /// DELETELEVELUPCHANNEL
   command == "deletelevelupchannel"
@@ -169,47 +128,6 @@ module.exports = async function command(client, message, database) {
   command == "donate"
   ? Networks.kofi(message)
   : null;
-  ///
-
-  /// GIFT
-  // let schedule = require("node-schedule");
-
-  // let j = schedule.scheduleJob("* * * 12 25 *", async function(){
-//     if (command == "gift") {
-//       lrandom = Math.floor(Math.random() * 6);
-//       mrandom = Math.floor(Math.random() * 500);
-
-//       m = await message.channel.send("Você recebeu um presente!\n:gift: :open_mouth:");
-      
-//       setTimeout(() => {
-//         m.edit(`${lrandom} level(is) e ${mrandom} moeda(s)! :partying_face:`);
-//       }, 5000);
-
-//       let docReferenceAux = database.collection("Usuarios").doc(message.guild.id);
-
-//       let docReference = docReferenceAux
-//         .collection("Usuarios")
-//         .doc(message.author.id);
-        
-//       docReference.get().then((docSnapshot) => {
-//         if (docSnapshot.exists) {
-//         docReference
-//           .update({
-//             level: docSnapshot.data().level + lrandom,
-//             money: docSnapshot.data().money + mrandom,
-//           })
-//           .then(function () {
-//             console.log("Presente!");
-//           })
-//           .catch(function (error) {
-//             console.error(error);
-//             console.log("Erro!");
-//           });
-//         }
-//       });
-//     // j.cancel();
-//   }
-// // });
   ///
 
   /// GITHUB
@@ -245,11 +163,6 @@ module.exports = async function command(client, message, database) {
   ? Jokenpo.play(database, client, message, args)
   : null;
   ///
-
-  // if (command == "messageoffchannel") {
-  //   let channel = client.channels.cache.get(args[0].replace("<#", "").replace(">", ""));z
-  //   console.log(channel);
-  // }
 
   /// PING
   command == "ping"
@@ -382,103 +295,6 @@ module.exports = async function command(client, message, database) {
   // somente administradores
   ? Role.setin(message, args)
   : null;
-  ///
-
-  /// STACKGAME
-  // if (command == "stackgamecreate") {
-  //   const axios = require("axios");
-
-  //   function createGame() {
-  //     axios
-  //       .get(`https://thegameapi.herokuapp.com/new/${args[0]}/${args[1]}`)
-  //       .then(function (response) {
-  //         message.channel.send({embed: {description: `Cores: ${response.data.colors}
-  //         Jogo:\n${JSON.stringify(response.data.game)}
-  //         ID: ${response.data.id}
-  //         Seed: ${response.data.seed}
-  //         Status: ${response.data.status}`}});
-  //       })
-  //       .catch(function (error) {
-  //         message.channel.send(error);
-  //       });
-  //   }
-
-  // createGame();
-
-  // }
-
-  // if (command == "stackgameplay") {
-  //   const axios = require("axios");
-
-  //   function playGame(id) {
-  //     axios
-  //       .get(`https://thegameapi.herokuapp.com/game/${id}`)
-  //       .then(async function (response) {
-  //         message.channel.send({embed: {description: `Cores: ${response.data.colors}
-  //         Jogo:\n${JSON.stringify(response.data.game)}
-  //         ID: ${response.data.id}
-  //         Seed: ${response.data.seed}
-  //         Status: ${response.data.status}`}});
-    
-  //         let msg = await message.channel.send({embed: {description: "Processando..."}});
-
-  //         let exclude = [];
-  //         let movimentos = 0;
-  //         while (response.data.status == "incomplete") {
-  //           msg.edit({embed: {description: "Processando..."}});
-  //           let random1 = Math.floor(Math.random() * response.data.game.length - 1);
-  //           let random2 = Math.floor(Math.random() * response.data.game.length - 1);
-  //           let from = random1;
-  //           let to = random2;
-    
-            
-  //           if (exclude.includes(random1) || exclude.includes(random2)) {
-  //             from = 0;
-  //             to = 0;
-  //           }
-    
-  //           await axios
-  //             .post(`https://thegameapi.herokuapp.com/game/${response.data.id}`, {
-  //               from: from,
-  //               to: to,
-  //             })
-  //             .then(async (res) => {
-  //               // console.log(res.data.game);
-  //               response = res;
-  //               movimentos++;
-    
-  //               for (let i = 0; i < res.data.game.length; i++) {
-  //                 const allEqual = (arr) => arr.every((val) => val === arr[0]);
-  //                 if (
-  //                   response.data.game[i].length == response.data.colors &&
-  //                   allEqual(response.data.game[i])
-  //                 ) {
-  //                   exclude.push(i);
-  //                 }
-  //               }
-  //             });
-    
-  //           if (response.data.status == "complete") {
-  //             msg.edit({embed:{description: `Jogo:\n${JSON.stringify(response.data.game)}\nMovimentos: ${movimentos}`}});
-
-  //             axios
-  //               .delete(`https://thegameapi.herokuapp.com/game/${response.data.id}`)
-  //               .then(function (response) {
-  //                 message.channel.send({embed: {description: response.data}});
-  //               })
-  //               .catch(function (error) {
-  //                 message.channel.send(error);
-  //               })
-  //           }
-  //           console.log(response.data.status);
-  //         }
-  //       })
-  //       .catch(function (error) {
-  //         message.channel.send(error);
-  //       });
-  //   }
-  //   playGame(args[0]);
-  // }
   ///
   /////
 };

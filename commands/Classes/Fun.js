@@ -111,6 +111,28 @@ class Fun {
     new GameCord.ConnectFour(message).setTitle("Connect4").run();
   }
 
+  cookie(message) {
+    const axios = require("axios");
+
+    axios
+      .get("https://helloacm.com/api/fortune/")
+      .then(function (response) {
+        message.channel.send({
+          embed: {
+            description:
+              ":fortune_cookie: Biscoito da Sorte (em inglês)\n" +
+              response.data,
+            footer: {
+              text: "https://helloacm.com/api/fortune/",
+            },
+          },
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   risitas(message) {
     message.channel.send("https://www.youtube.com/watch?v=QT13kk8HDDo");
   }
