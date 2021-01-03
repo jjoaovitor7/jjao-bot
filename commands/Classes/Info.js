@@ -65,6 +65,36 @@ class Info {
   //       .setFooter(`ID: ${message.author.id}`)
   //   );
   // }
+
+  covidbrazilcases(message) {
+    const axios = require("axios");
+
+    axios
+      .get("https://covid19-brazil-api.now.sh/api/report/v1")
+      .then(function (response) {
+        let arrCovid = [];
+        for (let i = 0; i < response.data.data.length; i++) {
+          arrCovid.push(
+            response.data.data[i].state +
+              ": " +
+              response.data.data[i].cases +
+              "\n"
+          );
+        }
+        message.channel.send({
+          embed: {
+            title: ":syringe: Casos de COVID-19 no Brasil (por estado)",
+            description: arrCovid.sort().join("").toString(),
+            footer: {
+              text: "https://covid19-brazil-api.now.sh/api/report/v1",
+            },
+          },
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 }
 
 module.exports = Info;
