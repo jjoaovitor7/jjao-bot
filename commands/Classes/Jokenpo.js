@@ -167,4 +167,4 @@ class Jokenpo {
   }
 }
 
-module.exports = Jokenpo;
+module.exports = new Jokenpo();

@@ -97,4 +97,4 @@ class Info {
   }
 }
 
-module.exports = Info;
+module.exports = new Info();

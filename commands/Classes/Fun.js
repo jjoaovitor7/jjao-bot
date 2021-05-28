@@ -305,4 +305,4 @@ class Fun {
   }
 }
 
-module.exports = Fun;
+module.exports = new Fun();

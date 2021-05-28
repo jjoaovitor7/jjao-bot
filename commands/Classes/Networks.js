@@ -14,4 +14,4 @@ class Networks {
   }
 }
 
-module.exports = Networks;
+module.exports = new Networks();
