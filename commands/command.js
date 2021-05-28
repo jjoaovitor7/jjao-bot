@@ -3,8 +3,6 @@ module.exports = function command(client, message, database) {
   let command = commandAux[0];
   let args = commandAux.slice(1);
 
-
-  ///// Instanciando classes
   let Balance = require("./Classes/Balance.js");
   let Fun = require("./Classes/Fun.js");
   let Info = require("./Classes/Info.js");
@@ -15,172 +13,171 @@ module.exports = function command(client, message, database) {
   let Role = require("./Classes/Role.js");
   let Utils = require("./Classes/Utils.js");
 
+  switch (command) {
+    // GERAL
+    case "avatar":
+      Profile.avatar(message);
+      break;
 
-  /// GERAL
-  command == "avatar"
-  ? Profile.avatar(message)
-  : null;
+    case "avatar2braille":
+      Fun.avatar2braille(message);
+      break;
 
-  command == "avatar2braille"
-  ? Fun.avatar2braille(message)
-  : null;
+    case "avatar2circle":
+      Fun.avatar2circle(message);
+      break;
 
-  command == "avatar2circle"
-  ? Fun.avatar2circle(message)
-  : null;
+    case "avatar2pixel":
+      Fun.avatar2pixel(message);
+      break;
 
-  command == "avatar2pixel"
-  ? Fun.avatar2pixel(message)
-  : null;
+    case "deletelevelupchannel":
+      Utils.deleteLevelUpChannel(database, message);
+      break;
 
-  command == "deletelevelupchannel"
-  ? Utils.deleteLevelUpChannel(database, message)
-  : null;
+    case "discord":
+      Networks.discord(message);
+      break;
 
-  command == "discord"
-  ? Networks.discord(message)
-  : null;
+    case "donate":
+      Networks.kofi(message);
+      break;
 
-  command == "donate"
-  ? Networks.kofi(message)
-  : null;
+    case "github":
+      Networks.github(message);
+      break;
 
-  command == "github"
-  ? Networks.github(message)
-  : null;
+    case "invite":
+      Utils.invite(message);
+      break;
 
-  command == "invite"
-  ? Utils.invite(message)
-  : null;
-  
-  command == "setlevelupchannel"
-  ? Utils.setLevelUpChannel(database, message, args)
-  : null;
+    case "setlevelupchannel":
+      Utils.setLevelUpChannel(database, message, args);
+      break;
 
+    // LEVELING E ECONOMIA
+    case "coinsranking":
+      Ranking.moneyranking(database, message);
+      break;
 
-  /// LEVELING E ECONOMIA
-  command == "coinsranking"
-  ? Ranking.moneyranking(database, message)
-  : null;
+    case "daily":
+      Balance.daily(database, message);
+      break;
 
-  command == "daily"
-  ? Balance.daily(database, message)
-  : null;
+    case "monthly":
+      Balance.monthly(database, message);
+      break;
 
-  command == "monthly"
-  ? Balance.monthly(database, message)
-  : null;
+    case "xpranking":
+      Ranking.xpranking(database, message);
+      break;
 
-  command == "xpranking"
-  ? Ranking.xpranking(database, message)
-  : null;
+    case "weekly":
+      Balance.weekly(database, message);
+      break;
 
-  command == "weekly"
-  ? Balance.weekly(database, message)
-  : null;
+    // ENTRETENIMENTO
+    case "clap":
+      Fun.clap(message);
+      break;
 
-  
-  /// ENTRETENIMENTO
-  command == "clap"
-  ? Fun.clap(message)
-  : null;
+    case "connect4":
+      Fun.connect4(message);
+      break;
 
-  command == "connect4"
-  ? Fun.connect4(message)
-  : null;
+    case "cookie":
+      Fun.cookie(message);
+      break;
 
-  command == "cookie"
-  ? Fun.cookie(message)
-  : null;
+    case "jokenpo":
+      Jokenpo.play(database, client, message, args);
+      break;
 
-  command == "jokenpo"
-  ? Jokenpo.play(database, client, message, args)
-  : null;
+    case "rndimg":
+      Fun.rndimg(message, args);
+      break;
 
-   command == "rndimg" 
-  ? Fun.rndimg(message, args)
-  : null;
+    case "rndnote":
+      Fun.rndnote(message);
+      break;
 
-  command == "rndnote"
-  ? Fun.rndnote(message)
-  : null;
+    case "sadcat":
+      Fun.sadcat(message);
+      break;
 
-  command == "sadcat"
-  ? Fun.sadcat(message)
-  : null;
+    case "snake":
+      Fun.snake(message);
+      break;
 
-  command == "snake"
-  ? Fun.snake(message)
-  : null;
+    case "risitas":
+      Fun.risitas(message);
+      break;
 
-  command == "risitas"
-  ? Fun.risitas(message)
-  : null;
+    case "word2ascii":
+      Fun.word2ascii(message, args);
+      break;
 
-  command == "word2ascii"
-  ? Fun.word2ascii(message, args)
-  : null;
+    // INFO
+    case "bitcoinprice":
+      Utils.bitcoinprice(message, args);
+      break;
 
- 
-  /// INFO
-  command == "bitcoinprice"
-  ? Utils.bitcoinprice(message, args)
-  : null;
+    case "botinfo":
+      Info.botinfo(client, message);
+      break;
 
-  command == "botinfo"
-  ? Info.botinfo(client, message)
-  : null;
+    case "brazilcovidcases":
+      Info.covidbrazilcases(message);
+      break;
 
-  command == "brazilcovidcases"
-  ? Info.covidbrazilcases(message)
-  : null;
+    case "help":
+      Utils.help(message);
+      break;
 
-  command == "help"
-  ? Utils.help(message)
-  : null;
+    case "ping":
+      Utils.ping(client, message);
+      break;
 
-  command == "ping"
-  ? Utils.ping(client, message)
-  : null;
+    case "profile":
+      Profile.profile(database, message, args);
+      break;
 
-  command == "profile"
-  ? Profile.profile(database, message, args)
-  : null;
+    case "profilecard":
+      Profile.profilecard(database, message);
+      break;
 
-  command == "profilecard"
-  ? Profile.profilecard(database, message)
-  : null;
+    case "serverinfo":
+      Info.serverinfo(message);
+      break;
 
-  command == "serverinfo"
-  ? Info.serverinfo(message)
-  : null;
+    case "userinfo":
+      Info.userinfo(message);
+      break;
 
-  // command == "userinfo"
-  // ? Info.userinfo(message)
-  // : null;
+    // CARGOS
+    // somente administradores
+    case "createrole":
+      Role.create(message, args);
+      break;
 
+    case "enterrole":
+      Role.enter(message, args);
+      break;
 
-  /// CARGOS
-  // somente administradores
-  command == "createrole" 
-  ? Role.create(message, args)
-  : null;
+    // somente administradores
+    case "deleterole":
+      Role.delete(message, args);
+      break;
 
-  command == "enterrole"
-  ? Role.enter(message, args)
-  : null;
+    case "exitrole":
+      Role.exit(message, args);
+      break;
 
-  // somente administradores
-  command == "deleterole"
-  ? Role.delete(message, args)
-  : null;
-
-  command == "exitrole"
-  ? Role.exit(message, args)
-  : null;
-
-  // somente administradores
-  command == "setinrole"
-  ? Role.setin(message, args)
-  : null;
+    // somente administradores
+    case "setinrole":
+      Role.setin(message, args);
+    
+    default:
+      break;
+  }
 };
