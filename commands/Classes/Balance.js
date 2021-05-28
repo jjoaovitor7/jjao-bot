@@ -222,4 +222,4 @@ class Balance {
   }
 }
 
-module.exports = Balance;
+module.exports = new Balance();

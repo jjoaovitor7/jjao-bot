@@ -168,4 +168,4 @@ class Profile {
   }
 }
 
-module.exports = Profile;
+module.exports = new Profile();

@@ -80,4 +80,4 @@ class Ranking {
   // }
 }
 
-module.exports = Ranking;
+module.exports = new Ranking();

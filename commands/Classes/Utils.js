@@ -64,32 +64,52 @@ class Utils {
         .addFields(
           {
             name: "Geral",
-            value: `\`jj donate\`
-\`jj help\`
-\`jj ping\`
-\`jj avatar\`
+            value: `\`jj avatar\`
 \`jj avatar2braille\`
 \`jj avatar2circle\`
 \`jj avatar2pixel\`
+\`jj deletelevelupchannel\`
+\`jj discord\`
+\`jj donate\`
+\`jj github\`
 \`jj invite\`
+\`jj setlevelupchannel\`
+`,
+            inline: true,
+          },
+          {
+            name: "Entretenimento",
+            value: `\`jj clap\`
+\`jj connect4\`
 \`jj cookie\`
-\`jj covidbrazilcases\`
+\`jj jokenpo\`
+\`jj rndimg\`
+\`jj rndnote\`
+\`jj sadcat\`
+\`jj snake\`
+\`jj risitas\`
+\`jj word2ascii\`
+`,
+            inline: true,
+          },
+          {
+            name: "Info",
+            value: `\`jj bitcoinprice\`
+\`jj botinfo\`
+\`jj brazilcovidcases\`
+\`jj help\`
+\`jj ping\`
+\`jj profile\`
+\`jj profilecard\`
+\`jj serverinfo\`
 `,
             inline: true,
           },
           {
             name: "Leveling e Economia",
-            value: `\`jj profile\`
-\`jj profilecard\`
+            value: `\`jj coinsranking\`
+\`jj daily | weekly | monthly \`
 \`jj xpranking\`
-\`jj coinsranking\`
-\`jj daily\`
-\`jj weekly\`
-\`jj monthly\`
-\`jj gift (25/12)\`
-\`jj bitcoinprice [BRL|USD]\`
-\`jj setlevelupchannel [canal]\`
-\`jj deletelevelupchannel\`
 `,
             inline: true,
           },
@@ -100,36 +120,6 @@ class Utils {
 \`jj setinrole [user] [role]\`
 \`jj exitrole [role]\`
 \`jj deleterole [role]\`
-`,
-            inline: true,
-          },
-          {
-            name: "Entretenimento",
-            value: `\`jj jokenpo\`
-\`jj snake\`
-\`jj rndimg [palavra]\`
-\`jj sadcat\`
-\`jj clap\`
-\`jj risitas\`
-\`jj gritar\`
-\`jj gritaum\`
-\`jj connect4\`
-\`jj word2ascii [palavra]
-(sem acentos\ne caracteres especiais)\`
-`,
-            inline: true,
-          },
-          {
-            name: "Networks",
-            value: `\`jj discord\`
-\`jj github\`
-`,
-            inline: true,
-          },
-          {
-            name: "Info",
-            value: `\`jj botinfo\`
-\`jj serverinfo\`
 `,
             inline: true,
           }
@@ -228,4 +218,4 @@ class Utils {
   }
 }
 
-module.exports = Utils;
+module.exports = new Utils();
