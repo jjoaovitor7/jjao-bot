@@ -13,171 +13,56 @@ module.exports = function command(client, message, database) {
   let Role = require("./Classes/Role.js");
   let Utils = require("./Classes/Utils.js");
 
-  switch (command) {
+  let commands = {
     // GERAL
-    case "avatar":
-      Profile.avatar(message);
-      break;
-
-    case "avatar2braille":
-      Fun.avatar2braille(message);
-      break;
-
-    case "avatar2circle":
-      Fun.avatar2circle(message);
-      break;
-
-    case "avatar2pixel":
-      Fun.avatar2pixel(message);
-      break;
-
-    case "deletelevelupchannel":
-      Utils.deleteLevelUpChannel(database, message);
-      break;
-
-    case "discord":
-      Networks.discord(message);
-      break;
-
-    case "donate":
-      Networks.kofi(message);
-      break;
-
-    case "github":
-      Networks.github(message);
-      break;
-
-    case "invite":
-      Utils.invite(message);
-      break;
-
-    case "setlevelupchannel":
-      Utils.setLevelUpChannel(database, message, args);
-      break;
+    avatar: () => Profile.avatar(message),
+    avatar2braille: () => Fun.avatar2braille(message),
+    avatar2circle: () => Fun.avatar2circle(message),
+    avatar2pixel: () => Fun.avatar2pixel(message),
+    deletelevelupchannel: () => Utils.deleteLevelUpChannel(database, message),
+    discord: () => Networks.discord(message),
+    donate: () => Networks.kofi(message),
+    github: () => Networks.github(message),
+    invite: () => Utils.invite(message),
+    setlevelupchannel: () => Utils.setLevelUpChannel(database, message, args),
 
     // LEVELING E ECONOMIA
-    case "coinsranking":
-      Ranking.moneyranking(database, message);
-      break;
-
-    case "daily":
-      Balance.daily(database, message);
-      break;
-
-    case "monthly":
-      Balance.monthly(database, message);
-      break;
-
-    case "xpranking":
-      Ranking.xpranking(database, message);
-      break;
-
-    case "weekly":
-      Balance.weekly(database, message);
-      break;
+    coinsranking: () => Ranking.moneyranking(database, message),
+    daily: () => Balance.daily(database, message),
+    monthly: () => Balance.monthly(database, message),
+    xpranking: () => Ranking.xpranking(database, message),
+    weekly: () => Balance.weekly(database, message),
 
     // ENTRETENIMENTO
-    case "clap":
-      Fun.clap(message);
-      break;
-
-    case "connect4":
-      Fun.connect4(message);
-      break;
-
-    case "cookie":
-      Fun.cookie(message);
-      break;
-
-    case "jokenpo":
-      Jokenpo.play(database, client, message, args);
-      break;
-
-    case "rndimg":
-      Fun.rndimg(message, args);
-      break;
-
-    case "rndnote":
-      Fun.rndnote(message);
-      break;
-
-    case "sadcat":
-      Fun.sadcat(message);
-      break;
-
-    case "snake":
-      Fun.snake(message);
-      break;
-
-    case "risitas":
-      Fun.risitas(message);
-      break;
-
-    case "word2ascii":
-      Fun.word2ascii(message, args);
-      break;
+    clap:() => Fun.clap(message),
+    connect4: () => Fun.connect4(message),
+    cookie: () => Fun.cookie(message),
+    jokenpo: () => Jokenpo.play(database, client, message, args),
+    rndimg: () => Fun.rndimg(message, args),
+    rndnote: () => Fun.rndnote(message),
+    sadcat: () => Fun.sadcat(message),
+    snake: () => Fun.snake(message),
+    risitas: () => Fun.risitas(message),
+    word2ascii: () => Fun.word2ascii(message, args),
 
     // INFO
-    case "bitcoinprice":
-      Utils.bitcoinprice(message, args);
-      break;
-
-    case "botinfo":
-      Info.botinfo(client, message);
-      break;
-
-    case "brazilcovidcases":
-      Info.covidbrazilcases(message);
-      break;
-
-    case "help":
-      Utils.help(message);
-      break;
-
-    case "ping":
-      Utils.ping(client, message);
-      break;
-
-    case "profile":
-      Profile.profile(database, message, args);
-      break;
-
-    case "profilecard":
-      Profile.profilecard(database, message);
-      break;
-
-    case "serverinfo":
-      Info.serverinfo(message);
-      break;
-
-    case "userinfo":
-      Info.userinfo(message);
-      break;
+    bitcoinprice: () => Utils.bitcoinprice(message, args),
+    botinfo: () => Info.botinfo(client, message),
+    brazilcovidcases: () => Info.covidbrazilcases(message),
+    help: () => Utils.help(message),
+    ping: () => Utils.ping(client, message),
+    profile: () => Profile.profile(database, message, args),
+    profilecard: () => Profile.profilecard(database, message),
+    serverinfo: () => Info.serverinfo(message),
+    userinfo: () => Info.userinfo(message),
 
     // CARGOS
-    // somente administradores
-    case "createrole":
-      Role.create(message, args);
-      break;
+    createrole: () => Role.create(message, args), // somente administradores
+    enterrole: () => Role.enter(message, args),
+    deleterole: () => Role.delete(message, args), // somente administradores
+    exitrole: () => Role.exit(message, args),
+    setinrole: () => Role.setin(message, args), // somente administradores
+  };
 
-    case "enterrole":
-      Role.enter(message, args);
-      break;
-
-    // somente administradores
-    case "deleterole":
-      Role.delete(message, args);
-      break;
-
-    case "exitrole":
-      Role.exit(message, args);
-      break;
-
-    // somente administradores
-    case "setinrole":
-      Role.setin(message, args);
-    
-    default:
-      break;
-  }
+  commands[command]();
 };
