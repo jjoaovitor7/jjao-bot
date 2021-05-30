@@ -246,7 +246,7 @@ class Fun {
     let track = new MidiWriter.Track();
     track.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
 
-    notes = [
+    let notes = [
       "A3",
       "A4",
       "Ab4",
@@ -274,7 +274,7 @@ class Fun {
       "G5",
       "Gb5",
     ];
-    notesAux = [];
+    let notesAux = [];
 
     notesAux.push(notes[Math.floor(Math.random() * (notes.length - 1))]);
     track.addEvent(
