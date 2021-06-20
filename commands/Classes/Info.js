@@ -97,7 +97,7 @@ class Info {
       });
   }
 
-  async countCommands(message, countCommands) {
+  countCommands(message, countCommands) {
     let auxGraph1 = [];
     let auxGraph2 = [];
     for (let command in countCommands) {
@@ -112,7 +112,11 @@ class Info {
         data: {
           labels: auxGraph1,
           datasets: [
-            { label: "Quantidade de Uso de Comandos (Geral)", data: auxGraph2, backgroundColor: "#006400"},
+            {
+              label: "Quantidade de Uso de Comandos (Geral)",
+              data: auxGraph2,
+              backgroundColor: "#006400",
+            },
           ],
         },
         options: {
@@ -136,7 +140,8 @@ class Info {
     message.channel.send({
       embed: {
         title: "Quantidade de Uso de Comandos",
-        description: "obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.",
+        description:
+          "obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.",
         image: {
           url: chart.getUrl(),
         },
