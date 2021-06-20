@@ -77,7 +77,7 @@ let countCommands = {
   profilecard: 0,
   serverinfo: 0,
   userinfo: 0,
-  countCommands: 0,
+  countcommands: 0,
 
   // CARGOS
   createrole: 0,
