@@ -1,4 +1,4 @@
-module.exports = function command(client, message, database) {
+module.exports = function command(client, message, database, countCommands) {
   let commandAux = message.content.substr(3).split(" ");
   let command = commandAux[0];
   let args = commandAux.slice(1);
@@ -34,7 +34,7 @@ module.exports = function command(client, message, database) {
     weekly: () => Balance.weekly(database, message),
 
     // ENTRETENIMENTO
-    clap:() => Fun.clap(message),
+    clap: () => Fun.clap(message),
     connect4: () => Fun.connect4(message),
     cookie: () => Fun.cookie(message),
     jokenpo: () => Jokenpo.play(database, client, message, args),
@@ -55,6 +55,7 @@ module.exports = function command(client, message, database) {
     profilecard: () => Profile.profilecard(database, message),
     serverinfo: () => Info.serverinfo(message),
     userinfo: () => Info.userinfo(message),
+    countcommands: () => Info.countCommands(message, countCommands),
 
     // CARGOS
     createrole: () => Role.create(message, args), // somente administradores
@@ -65,4 +66,5 @@ module.exports = function command(client, message, database) {
   };
 
   commands[command]();
+  countCommands[command] = parseInt(countCommands[command]) + 1;
 };

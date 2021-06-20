@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-duration-format");
+const QuickChart = require("quickchart-js");
 
 class Info {
   botinfo(client, message) {
@@ -94,6 +95,53 @@ class Info {
       .catch(function (error) {
         console.log(error);
       });
+  }
+
+  async countCommands(message, countCommands) {
+    let auxGraph1 = [];
+    let auxGraph2 = [];
+    for (let command in countCommands) {
+      auxGraph1.push(command);
+      auxGraph2.push(parseInt(countCommands[command]));
+    }
+
+    let chart = new QuickChart();
+    chart
+      .setConfig({
+        type: "horizontalBar",
+        data: {
+          labels: auxGraph1,
+          datasets: [
+            { label: "Quantidade de Uso de Comandos (Geral)", data: auxGraph2, backgroundColor: "#006400"},
+          ],
+        },
+        options: {
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                ticks: {
+                  beginAtZero: true,
+                  // max: 100,
+                  // min: 0,
+                },
+              },
+            ],
+          },
+        },
+      })
+      .setWidth(800)
+      .setHeight(1024);
+
+    message.channel.send({
+      embed: {
+        title: "Quantidade de Uso de Comandos",
+        description: "obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.",
+        image: {
+          url: chart.getUrl(),
+        },
+      },
+    });
   }
 }
 

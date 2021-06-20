@@ -80,13 +80,11 @@ class Utils {
           {
             name: "Entretenimento",
             value: `\`jj clap\`
-\`jj connect4\`
 \`jj cookie\`
 \`jj jokenpo\`
 \`jj rndimg\`
 \`jj rndnote\`
 \`jj sadcat\`
-\`jj snake\`
 \`jj risitas\`
 \`jj word2ascii\`
 `,
@@ -102,6 +100,7 @@ class Utils {
 \`jj profile\`
 \`jj profilecard\`
 \`jj serverinfo\`
+\`jj countcommands\`
 `,
             inline: true,
           },
