@@ -46,7 +46,7 @@ class Profile {
           .setColor("#0099ff")
           .setTitle(userinfo.username + "#" + userinfo.discriminator)
           .addFields(
-            { name: "Level", value: profile.level, inline: true },
+            { name: "Level", value: profile.level+1, inline: true },
             { name: "Xp", value: profile.xp + "/100", inline: true },
             { name: "Saldo", value: profile.money + " moedas" }
           )
@@ -155,7 +155,7 @@ class Profile {
       )
       .setCurrentXP(xp)
       .setRequiredXP(100)
-      .setLevel(level)
+      .setLevel(level+1)
       .setRank(money, "SALDO (Moedas)", true)
       .setProgressBar("#fff", "COLOR")
       .setUsername(message.author.username)
