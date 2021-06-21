@@ -14,7 +14,7 @@ class Ranking {
         querySnapshot.forEach(function (documentSnapshot) {
           arrAux.push(
             `${i}: ${documentSnapshot.data().name} (level: ${
-              documentSnapshot.data().level
+              documentSnapshot.data().level+1
             }, xp: ${documentSnapshot.data().xp})\n`
           );
           i++;
