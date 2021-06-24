@@ -10,7 +10,7 @@ const sS = require("./modules/showServers.js");
 const sA = require("./modules/showActivity.js");
 const lC = require("./modules/levelController.js");
 
-let inCooldown = Set();
+let inCooldown = new Set();
 
 // firebase
 const firebase = require("firebase/app");
@@ -114,7 +114,7 @@ client.on("message", async(message) => {
         return;
     } else {
         inCooldown.add(message.author.id);
-        setTimeout(() => inCooldown.remove(message.author.id), 5000);
+        setTimeout(() => inCooldown.delete(message.author.id), 5000);
     }
 
 
