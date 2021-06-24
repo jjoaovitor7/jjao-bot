@@ -58,6 +58,7 @@ let countCommands = {
     weekly: 0,
 
     // ENTRETENIMENTO
+    blackjack: 0,
     clap: 0,
     connect4: 0,
     cookie: 0,
