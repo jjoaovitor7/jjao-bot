@@ -110,13 +110,12 @@ client.on("message", async(message) => {
         });
     }
 
-    if (inCooldown.has(message.author.id) && !(message.content.startsWith(process.env.PREFIX))) {
+    if (inCooldown.has(message.guild.id.concat(message.author.id)) && !(message.content.startsWith(process.env.PREFIX))) {
         return;
     } else {
-        // levelController
         lC(client, database, message);
-        inCooldown.add(message.author.id);
-        setTimeout(() => inCooldown.delete(message.author.id), 5000);
+        inCooldown.add(message.guild.id.concat(message.author.id));
+        setTimeout(() => inCooldown.delete(message.guild.id.concat(message.author.id)), 5000);
     }
 
     if (message.content.startsWith(process.env.PREFIX)) {
