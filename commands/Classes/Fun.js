@@ -151,11 +151,6 @@ class Fun {
         });
     }
 
-    // connect4(message) {
-    //   const GameCord = require("gamecord").djs;
-    //   new GameCord.ConnectFour(message).setTitle("Connect4").run();
-    // }
-
     cookie(message) {
         const axios = require("axios");
 
@@ -177,65 +172,56 @@ class Fun {
             });
     }
 
+    jokenpo(database, client, message, args) {
+        const _Jokenpo = require("discord-jokenpo");
+        const Jokenpo = new _Jokenpo("Tente .jokenpo `[pedra|papel|tesoura]`.\nex.: `.jokenpo pedra`", "pt-br", "Empate!", `<@${client.user.id}> ganhou.`, `<@${message.author.id}> ganhou.`, message, args);
+
+        const result = Jokenpo.play();
+        if (result.player == false && result.player == false) {
+        }
+        else if (result.bot == true) {
+          let random = Math.floor(Math.random() * 6 + 1);
+          message.channel.send(`Você perdeu \`${random} coins\`!`);
+          database
+            .collection("Usuarios")
+            .doc(message.guild.id)
+            .collection("Usuarios")
+            .where("id", "==", message.author.id)
+            .get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (documentSnapshot) {
+                database
+                  .collection("Usuarios")
+                  .doc(message.guild.id)
+                  .collection("Usuarios")
+                  .doc(documentSnapshot.id).update({money: documentSnapshot.data().money - random});
+              });
+            });
+        }
+        else if (result.player == true) {
+            let random = Math.floor(Math.random() * 11 + 1);
+            message.channel.send(`Você ganhou \`${random} coins\`!`);
+            database
+              .collection("Usuarios")
+              .doc(message.guild.id)
+              .collection("Usuarios")
+              .where("id", "==", message.author.id)
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (documentSnapshot) {
+                  database
+                    .collection("Usuarios")
+                    .doc(message.guild.id)
+                    .collection("Usuarios")
+                    .doc(documentSnapshot.id).update({money: documentSnapshot.data().money + random});
+                });
+              });
+        }
+    }
+
     risitas(message) {
         message.channel.send("https://www.youtube.com/watch?v=QT13kk8HDDo");
     }
-
-    // gritar(message, talkedRecently) {
-    //   if (talkedRecently.has(message.author.id)) {
-    //     message.reply("agora você só pode usar esse comando daqui a 5 minutos.");
-    //   } else {
-    //     // message.channel.send("A".repeat(Math.floor(Math.random() * 2000)));
-    //     message.channel.send("A".repeat(Math.floor(Math.random() * 100)));
-
-    //     talkedRecently.add(message.author.id);
-    //     setTimeout(() => {
-    //       talkedRecently.delete(message.author.id);
-    //     }, 300000);
-    //   }
-    // }
-
-    // gritaum(message, talkedRecently) {
-    //   if (talkedRecently.has(message.author.id)) {
-    //     message.reply("agora você só pode usar esse comando daqui a 5 minutos.");
-    //   } else {
-    //     let screamURLs = [
-    //       "https://www.youtube.com/watch?v=cWBPjTQvNY8", // MARIO SCREAMING 2
-    //       "https://www.youtube.com/watch?v=32Hp1LW08Yc", // MARIO SCREAMING
-    //       "https://www.youtube.com/watch?v=FIZ7iBHZglA", // MARIO SCREAMING 3
-    //       "https://www.youtube.com/watch?v=CMzETi5kGJ4", // LUIGI SCREAMING
-    //       "https://www.youtube.com/watch?v=5VuQxoNrwhw", // KIRBY'S SCREAMING ADVENTURE
-    //       "https://www.youtube.com/watch?v=BTs5FS66IUI", // Baby Shark But Im Screaming The Lyrics
-    //       "https://www.youtube.com/watch?v=SIaFtAKnqBU", // The Screaming Sheep (Original Upload)
-    //       "https://www.youtube.com/watch?v=1paueaTWFRE", // Goat Scream - Origine Meme (HD)
-    //       "https://www.youtube.com/watch?v=0MuOtw4cSig", // Mickey Mouse Clubhouse But Im Screaming The Lyrics
-    //       "https://www.youtube.com/watch?v=sHDMveJ02rg", // Wizard Yensid screaming (meme template)
-    //       "https://www.youtube.com/watch?v=7LGTEI1RMoQ", // Old man screaming meme
-    //       "https://www.youtube.com/watch?v=x-OfjajZxRo", // Screaming Guy song in HD - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    //       "https://www.youtube.com/watch?v=5RsOkhR6KBc", // *screams*
-    //       "https://www.youtube.com/watch?v=umDr0mPuyQc", // NO GOD! PLEASE NO!!! NOOOOOOOOOO
-    //       "https://www.youtube.com/watch?v=paK-qnTp1KI", // Screaming Squirrel Meme (Original) | Sound Effect
-    //       "https://www.youtube.com/watch?v=70vN5lVUfO8", // The Orignal Screaming Squirrel
-    //       "https://www.youtube.com/watch?v=syNumVb2kUs", // Marmot screaming on Blackcomb Mountain
-    //       "https://www.youtube.com/watch?v=OOGTd1vejKw", // Gopher scream
-    //       "https://www.youtube.com/watch?v=Br8ffrN1fm0", //[𝗟𝗢𝗨𝗗] The Lion King but it's Meme Scream [𝗟𝗢𝗨𝗗]
-    //       "https://www.youtube.com/watch?v=VMIeODpgA_Y", // High pitch scream guy
-    //       "https://www.youtube.com/watch?v=mqWZN4ydXRg", // Tyler 1 scream meme
-    //       "https://www.youtube.com/watch?v=cVDOh5H32Qc", // SONIC SCREAMING
-    //       "https://www.youtube.com/watch?v=2o2BbWks-m8", // Keemstar screaming
-    //       "https://www.youtube.com/watch?v=9ohL0oy1zM8", // Robert Downey Jr Scream Meme
-    //       "https://www.youtube.com/watch?v=ytSVwETbZtI", // Filthy Frank - Confused Scream Meme
-    //       "https://www.youtube.com/watch?v=Bkq1PAyGuZY", // Screaming Mouse
-    //     ];
-    //     message.channel.send(
-    //       screamURLs[Math.floor(Math.random() * (screamURLs.length - 1))]
-    //     );
-    //     talkedRecently.add(message.author.id);
-    //     setTimeout(() => {
-    //       talkedRecently.delete(message.author.id);
-    //     }, 300000);
-    //   }
-    // }
 
     sadcat(message) {
         message.channel.send("https://tenor.com/view/austin-sad-cat-gif-18483293");
