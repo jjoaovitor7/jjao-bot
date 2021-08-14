@@ -174,7 +174,7 @@ class Fun {
 
     jokenpo(database, client, message, args) {
         const _Jokenpo = require("discord-jokenpo");
-        const Jokenpo = new _Jokenpo("Tente .jokenpo `[pedra|papel|tesoura]`.\nex.: `.jokenpo pedra`", "pt-br", "Empate!", `<@${client.user.id}> ganhou.`, `<@${message.author.id}> ganhou.`, message, args);
+        const Jokenpo = new _Jokenpo("Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`", "pt-br", "Empate!", `<@${client.user.id}> ganhou.`, `<@${message.author.id}> ganhou.`, message, args[0]);
 
         const result = Jokenpo.play();
         if (result.player == false && result.player == false) {
