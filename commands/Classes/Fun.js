@@ -176,8 +176,8 @@ class Fun {
         const _Jokenpo = require("discord-jokenpo");
         const Jokenpo = new _Jokenpo("Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`", "pt-br", "Empate!", `<@${client.user.id}> ganhou.`, `<@${message.author.id}> ganhou.`, message, args[0]);
 
-        const result = await Jokenpo.play();
-        if (result.player == false && result.player == false) {
+        const result = Jokenpo.play();
+        if (result.player == false && result.bot == false) {
         }
         else if (result.bot == true) {
           let random = Math.floor(Math.random() * 6 + 1);
