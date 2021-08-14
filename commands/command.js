@@ -37,7 +37,7 @@ module.exports = function command(client, message, database, countCommands) {
         clap: () => Fun.clap(message),
         connect4: () => Fun.connect4(message),
         cookie: () => Fun.cookie(message),
-        jokenpo: async () => await Fun.jokenpo(database, client, message, args).catch(err => console.error(err)),
+        jokenpo: () => Fun.jokenpo(database, client, message, args),
         rndimg: () => Fun.rndimg(message, args),
         rndnote: () => Fun.rndnote(message),
         sadcat: () => Fun.sadcat(message),
