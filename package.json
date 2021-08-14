@@ -11,6 +11,7 @@
     "axios": "^0.21.0",
     "canvacord": "^5.0.8",
     "discord-blackjack": "^2.0.4",
+    "discord-jokenpo": "^1.0.5",
     "discord.js": "^12.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
