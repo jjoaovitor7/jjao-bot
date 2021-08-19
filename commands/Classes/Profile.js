@@ -47,7 +47,7 @@ class Profile {
           .setTitle(userinfo.username + "#" + userinfo.discriminator)
           .addFields(
             { name: "Level", value: profile.level+1, inline: true },
-            { name: "Xp", value: profile.xp + "/100", inline: true },
+            { name: "Xp", value: profile.xp + `/${(profile.level+1)*100}`, inline: true },
             { name: "Saldo", value: profile.money + " moedas" }
           )
           .setThumbnail(
@@ -154,7 +154,7 @@ class Profile {
           ".png?size=1024"
       )
       .setCurrentXP(xp)
-      .setRequiredXP(100)
+      .setRequiredXP((level+1)*100)
       .setLevel(level+1)
       .setRank(money, "SALDO (Moedas)", true)
       .setProgressBar("#fff", "COLOR")
