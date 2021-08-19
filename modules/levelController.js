@@ -7,7 +7,7 @@ function levelController(client, database, message) {
 
   docReference.get().then((docSnapshot) => {
     if (docSnapshot.exists) {
-      if (docSnapshot.data().xp >= 100) {
+      if (docSnapshot.data().xp >= docSnapshot.data().level * 100) {
         docReference
           .update({
             xp: 0,
