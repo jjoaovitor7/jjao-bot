@@ -116,7 +116,7 @@ class Balance {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (docSnapshot) {
-            if (docSnapshot.data().money <= args[0]) {
+            if (docSnapshot.data().money <= args[0] && Number.isInteger(args[0])) {
               database
                 .collection("Usuarios")
                 .doc(message.guild.id)
