@@ -42,23 +42,10 @@ function addBonus(database, message, type) {
           .doc(message.guild.id)
           .collection("Usuarios")
           .doc(documentSnapshot.id)
-          .update({ money: documentSnapshot.data().money + qtde });
-      });
-    });
-  database
-    .collection("Usuarios")
-    .doc(message.guild.id)
-    .collection("Usuarios")
-    .where("id", "==", message.author.id)
-    .get()
-    .then(function (querySnapshot) {
-      querySnapshot.forEach(function (documentSnapshot) {
-        database
-          .collection("Usuarios")
-          .doc(message.guild.id)
-          .collection("Usuarios")
-          .doc(documentSnapshot.id)
-          .update({ daily: Date.now() });
+          .update({
+            money: documentSnapshot.data().money + qtde,
+            daily: Date.now(),
+          });
       });
     });
 }
@@ -109,6 +96,62 @@ class Balance {
       );
     } else {
       addBonus(database, message, "Mês");
+    }
+  }
+
+  transfer(database, message, args) {
+    let toTransfer = message.mentions.users.first();
+    if (
+      args[0] != "" &&
+      args[0] > 0 &&
+      toTransfer != undefined &&
+      toTransfer != message.author.id &&
+      toTransfer.bot == false
+    ) {
+      database
+        .collection("Usuarios")
+        .doc(message.guild.id)
+        .collection("Usuarios")
+        .where("id", "==", message.author.id)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (docSnapshot) {
+            database
+              .collection("Usuarios")
+              .doc(message.guild.id)
+              .collection("Usuarios")
+              .doc(docSnapshot.id)
+              .update({
+                money: docSnapshot.data().money - parseInt(args[0]),
+              });
+          });
+        });
+
+      database
+        .collection("Usuarios")
+        .doc(message.guild.id)
+        .collection("Usuarios")
+        .where("id", "==", toTransfer.id)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (docSnapshot) {
+            database
+              .collection("Usuarios")
+              .doc(message.guild.id)
+              .collection("Usuarios")
+              .doc(docSnapshot.id)
+              .update({
+                money: docSnapshot.data().money + parseInt(args[0]),
+              })
+              .then(() => {
+                message.channel.send(
+                  `Transferência de \`${args[0]} moeda(s)\` concluída.`
+                );
+              });
+          });
+        });
+    } else {
+      message.channel.send("Tente \`jj transfer [quantia] [usuario]\`.");
     }
   }
 }
