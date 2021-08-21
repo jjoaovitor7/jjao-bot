@@ -147,7 +147,7 @@ class Balance {
               })
               .then(() => {
                 message.channel.send(
-                  `Transferência de \`${args[0]} moeda(s)\` concluída.`
+                  `Transferência de \`${parseInt(args[0])} moeda(s)\` concluída.`
                 );
               });
           });
