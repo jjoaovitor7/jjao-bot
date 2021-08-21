@@ -116,14 +116,16 @@ class Balance {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (docSnapshot) {
-            database
-              .collection("Usuarios")
-              .doc(message.guild.id)
-              .collection("Usuarios")
-              .doc(docSnapshot.id)
-              .update({
-                money: docSnapshot.data().money - parseInt(args[0]),
-              });
+            if (docSnapshot.data().money <= args[0] && Number.isInteger(args[0])) {
+              database
+                .collection("Usuarios")
+                .doc(message.guild.id)
+                .collection("Usuarios")
+                .doc(docSnapshot.id)
+                .update({
+                  money: docSnapshot.data().money - parseInt(args[0]),
+                });
+            }
           });
         });
 
