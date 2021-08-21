@@ -104,6 +104,7 @@ class Utils {
                 value: `\`jj coinsranking\`
 \`jj daily | weekly | monthly \`
 \`jj xpranking\`
+\`jj transfer\`
 `,
                 inline: true,
             }, {
