@@ -102,8 +102,8 @@ class Balance {
   transfer(database, message, args) {
     let toTransfer = message.mentions.users.first();
     if (
-      args[0] != "" &&
-      args[0] > 0 &&
+      parseInt(args[0]) != "" &&
+      parseInt(args[0]) > 0 &&
       toTransfer != undefined &&
       toTransfer != message.author.id &&
       toTransfer.bot == false &&
@@ -119,7 +119,7 @@ class Balance {
         .then(function (querySnapshot) {
           querySnapshot.forEach(async function (docSnapshot) {
             money = await docSnapshot.data().money;
-            if (args[0] <= money) {
+            if (parseInt(args[0]) <= money) {
               database
                 .collection("Usuarios")
                 .doc(message.guild.id)
@@ -132,7 +132,7 @@ class Balance {
           });
         });
 
-      if (args[0] <= money) {
+      if (parseInt(args[0]) <= money) {
         database
           .collection("Usuarios")
           .doc(message.guild.id)
