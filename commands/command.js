@@ -31,6 +31,7 @@ module.exports = function command(client, message, database, countCommands) {
         monthly: () => Balance.monthly(database, message),
         xpranking: () => Ranking.xpranking(database, message),
         weekly: () => Balance.weekly(database, message),
+        transfer: () => Balance.transfer(database, message, args),
 
         // ENTRETENIMENTO
         blackjack: () => Fun._blackjack(message, client, database),
