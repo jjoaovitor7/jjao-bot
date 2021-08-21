@@ -137,7 +137,6 @@ class Balance {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (docSnapshot) {
-            if (docSnapshot.data().money <= args[0]) {
               database
                 .collection("Usuarios")
                 .doc(message.guild.id)
@@ -151,7 +150,6 @@ class Balance {
                     `Transferência de \`${args[0]} moeda(s)\` concluída.`
                   );
                 });
-            }
           });
         });
     } else {
