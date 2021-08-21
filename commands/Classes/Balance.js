@@ -116,7 +116,10 @@ class Balance {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (docSnapshot) {
-            if (docSnapshot.data().money <= args[0] && Number.isInteger(args[0])) {
+            if (
+              docSnapshot.data().money <= args[0] &&
+              Number.isInteger(args[0])
+            ) {
               database
                 .collection("Usuarios")
                 .doc(message.guild.id)
@@ -124,32 +127,33 @@ class Balance {
                 .doc(docSnapshot.id)
                 .update({
                   money: docSnapshot.data().money - parseInt(args[0]),
-                });
-            }
-          });
-        });
-
-      database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", toTransfer.id)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (docSnapshot) {
-              database
-                .collection("Usuarios")
-                .doc(message.guild.id)
-                .collection("Usuarios")
-                .doc(docSnapshot.id)
-                .update({
-                  money: docSnapshot.data().money + parseInt(args[0]),
                 })
                 .then(() => {
-                  message.channel.send(
-                    `Transferência de \`${args[0]} moeda(s)\` concluída.`
-                  );
+                  database
+                    .collection("Usuarios")
+                    .doc(message.guild.id)
+                    .collection("Usuarios")
+                    .where("id", "==", toTransfer.id)
+                    .get()
+                    .then(function (querySnapshot) {
+                      querySnapshot.forEach(function (docSnapshot) {
+                        database
+                          .collection("Usuarios")
+                          .doc(message.guild.id)
+                          .collection("Usuarios")
+                          .doc(docSnapshot.id)
+                          .update({
+                            money: docSnapshot.data().money + parseInt(args[0]),
+                          })
+                          .then(() => {
+                            message.channel.send(
+                              `Transferência de \`${args[0]} moeda(s)\` concluída.`
+                            );
+                          });
+                      });
+                    });
                 });
+            }
           });
         });
     } else {
