@@ -109,6 +109,7 @@ class Balance {
       toTransfer.bot == false &&
       Number.isInteger(parseInt(args[0]))
     ) {
+      let money;
       database
         .collection("Usuarios")
         .doc(message.guild.id)
@@ -116,8 +117,9 @@ class Balance {
         .where("id", "==", message.author.id)
         .get()
         .then(function (querySnapshot) {
-          querySnapshot.forEach(function (docSnapshot) {
-            if (docSnapshot.data().money <= args[0]) {
+          querySnapshot.forEach(async function (docSnapshot) {
+            money = await docSnapshot.data().money;
+            if (args[0] <= money) {
               database
                 .collection("Usuarios")
                 .doc(message.guild.id)
@@ -129,29 +131,34 @@ class Balance {
             }
           });
         });
-      database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", toTransfer.id)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (docSnapshot) {
-            database
-              .collection("Usuarios")
-              .doc(message.guild.id)
-              .collection("Usuarios")
-              .doc(docSnapshot.id)
-              .update({
-                money: docSnapshot.data().money + parseInt(args[0]),
-              })
-              .then(() => {
-                message.channel.send(
-                  `Transferência de \`${parseInt(args[0])} moeda(s)\` concluída.`
-                );
-              });
+
+      if (args[0] <= money) {
+        database
+          .collection("Usuarios")
+          .doc(message.guild.id)
+          .collection("Usuarios")
+          .where("id", "==", toTransfer.id)
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (docSnapshot) {
+              database
+                .collection("Usuarios")
+                .doc(message.guild.id)
+                .collection("Usuarios")
+                .doc(docSnapshot.id)
+                .update({
+                  money: docSnapshot.data().money + parseInt(args[0]),
+                })
+                .then(() => {
+                  message.channel.send(
+                    `Transferência de \`${parseInt(
+                      args[0]
+                    )} moeda(s)\` concluída.`
+                  );
+                });
+            });
           });
-        });
+      }
     } else {
       message.channel.send("Tente `jj transfer [quantia] [usuario]`.");
     }
