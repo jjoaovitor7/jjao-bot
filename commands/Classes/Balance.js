@@ -101,15 +101,15 @@ class Balance {
 
   transfer(database, message, args) {
     let toTransfer = message.mentions.users.first();
+    args[0] = parseInt(args[0]);
     if (
-      parseInt(args[0]) != "" &&
-      parseInt(args[0]) > 0 &&
+      args[0] != "" &&
+      args[0] > 0 &&
       toTransfer != undefined &&
       toTransfer != message.author.id &&
       toTransfer.bot == false &&
-      Number.isInteger(parseInt(args[0]))
+      Number.isInteger(args[0])
     ) {
-      let money;
       database
         .collection("Usuarios")
         .doc(message.guild.id)
@@ -118,47 +118,47 @@ class Balance {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(async function (docSnapshot) {
-            money = await docSnapshot.data().money;
-            if (parseInt(args[0]) <= money) {
+            if (args[0] <= docSnapshot.data().money) {
               database
                 .collection("Usuarios")
                 .doc(message.guild.id)
                 .collection("Usuarios")
                 .doc(docSnapshot.id)
                 .update({
-                  money: docSnapshot.data().money - parseInt(args[0]),
+                  money: docSnapshot.data().money -args[0],
                 });
+
+              database
+                .collection("Usuarios")
+                .doc(message.guild.id)
+                .collection("Usuarios")
+                .where("id", "==", toTransfer.id)
+                .get()
+                .then(function (querySnapshot) {
+                  querySnapshot.forEach(function (docSnapshot) {
+                    database
+                      .collection("Usuarios")
+                      .doc(message.guild.id)
+                      .collection("Usuarios")
+                      .doc(docSnapshot.id)
+                      .update({
+                        money: docSnapshot.data().money + args[0],
+                      })
+                      .then(() => {
+                        message.channel.send(
+                          `Transferência de \`${parseInt(
+                            args[0]
+                          )} moeda(s)\` concluída.`
+                        );
+                      });
+                  });
+                });
+            }
+            else {
+              message.reply("você não possui essa quantia de moedas.");
             }
           });
         });
-
-      if (parseInt(args[0]) <= money) {
-        database
-          .collection("Usuarios")
-          .doc(message.guild.id)
-          .collection("Usuarios")
-          .where("id", "==", toTransfer.id)
-          .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(function (docSnapshot) {
-              database
-                .collection("Usuarios")
-                .doc(message.guild.id)
-                .collection("Usuarios")
-                .doc(docSnapshot.id)
-                .update({
-                  money: docSnapshot.data().money + parseInt(args[0]),
-                })
-                .then(() => {
-                  message.channel.send(
-                    `Transferência de \`${parseInt(
-                      args[0]
-                    )} moeda(s)\` concluída.`
-                  );
-                });
-            });
-          });
-      }
     } else {
       message.channel.send("Tente `jj transfer [quantia] [usuario]`.");
     }
