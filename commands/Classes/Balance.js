@@ -125,7 +125,7 @@ class Balance {
                 .collection("Usuarios")
                 .doc(docSnapshot.id)
                 .update({
-                  money: docSnapshot.data().money -args[0],
+                  money: docSnapshot.data().money - args[0],
                 });
 
               database
@@ -153,8 +153,7 @@ class Balance {
                       });
                   });
                 });
-            }
-            else {
+            } else {
               message.reply("você não possui essa quantia de moedas.");
             }
           });
