@@ -79,8 +79,7 @@ class Utils {
           },
           {
             name: "Entretenimento",
-            value: `\`jj blackjack\`
-\`jj clap\`
+            value: `\`jj clap\`
 \`jj cookie\`
 \`jj jokenpo\`
 \`jj rndimg\`
