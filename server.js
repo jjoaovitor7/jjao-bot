@@ -1,128 +1,133 @@
-// discord
-const Discord = require("discord.js");
-const client = new Discord.Client({ disableEveryone: true });
-
 // .env
 require("dotenv").config();
 
+// discord
+const { Client, Intents } = require("discord.js");
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS],
+  disableEveryone: true,
+});
+
 // modules
-const sS = require("./modules/showServers.js");
-const sA = require("./modules/showActivity.js");
-const lC = require("./modules/levelController.js");
+const ShowController = require("./modules/ShowController.js");
+const LevelingController = require("./modules/LevelingController.js");
 
 let inCooldown = new Set();
 
 // firebase
 const firebase = require("firebase/app");
 require("firebase/firestore");
-
 const config = {
-    apiKey: process.env.APIKEY,
-    authDomain: process.env.AUTHDOMAIN,
-    projectId: process.env.PROJECTID,
-    storageBucket: process.env.STORAGEBUCKET,
-    messagingSenderId: process.env.MESSAGINGSENDERID,
-    appId: process.env.APPID,
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID,
+  appId: process.env.APPID,
 };
-
 const app = firebase.initializeApp(config);
 const database = firebase.firestore(app);
 
+// Discord
 client.on("ready", () => {
-    console.log(`Conectado como: ${client.user.tag}`);
+  console.log(`Conectado como: ${client.user.tag}.`);
 
-    // showServers
-    // sS(client);
-
-    // showActivity
-    sA(client);
+  // showActivity
+  ShowController.showActivity(client);
 });
 
 let countCommands = {
-    avatar: 0,
-    avatar2braille: 0,
-    avatar2circle: 0,
-    avatar2pixel: 0,
-    deletelevelupchannel: 0,
-    discord: 0,
-    donate: 0,
-    github: 0,
-    invite: 0,
-    setlevelupchannel: 0,
+  avatar: 0,
+  avatar2braille: 0,
+  avatar2circle: 0,
+  avatar2pixel: 0,
+  deletelevelupchannel: 0,
+  discord: 0,
+  donate: 0,
+  github: 0,
+  invite: 0,
+  setlevelupchannel: 0,
 
-    // LEVELING E ECONOMIA
-    coinsranking: 0,
-    daily: 0,
-    monthly: 0,
-    xpranking: 0,
-    weekly: 0,
+  // LEVELING E ECONOMIA
+  coinsranking: 0,
+  daily: 0,
+  monthly: 0,
+  xpranking: 0,
+  weekly: 0,
 
-    // ENTRETENIMENTO
-    blackjack: 0,
-    clap: 0,
-    connect4: 0,
-    cookie: 0,
-    jokenpo: 0,
-    rndimg: 0,
-    rndnote: 0,
-    sadcat: 0,
-    snake: 0,
-    risitas: 0,
-    word2ascii: 0,
+  // ENTRETENIMENTO
+  clap: 0,
+  connect4: 0,
+  cookie: 0,
+  jokenpo: 0,
+  rndimg: 0,
+  rndnote: 0,
+  sadcat: 0,
+  snake: 0,
+  risitas: 0,
+  word2ascii: 0,
 
-    // INFO
-    bitcoinprice: 0,
-    botinfo: 0,
-    brazilcovidcases: 0,
-    help: 0,
-    ping: 0,
-    profile: 0,
-    profilecard: 0,
-    serverinfo: 0,
-    userinfo: 0,
-    countcommands: 0,
+  // INFO
+  bitcoinprice: 0,
+  botinfo: 0,
+  brazilcovidcases: 0,
+  help: 0,
+  ping: 0,
+  profile: 0,
+  profilecard: 0,
+  serverinfo: 0,
+  userinfo: 0,
+  countcommands: 0,
 
-    // CARGOS
-    createrole: 0,
-    enterrole: 0,
-    deleterole: 0,
-    exitrole: 0,
-    setinrole: 0,
+  // CARGOS
+  createrole: 0,
+  enterrole: 0,
+  deleterole: 0,
+  exitrole: 0,
+  setinrole: 0,
 };
 
-client.on("message", async(message) => {
-    // se a mensagem for do próprio bot, ignore-a
-    if (message.author.id == client.user.id) {
-        return;
-    }
+client.on("message", async (message) => {
+  // se a mensagem for do próprio bot, ignore-a
+  if (message.author.id == client.user.id) {
+    return;
+  }
 
-    // se a mensagem for de um outro bot, ignore-a
-    if (message.author.bot == true) {
-        return;
-    }
+  // se a mensagem for de um outro bot, ignore-a
+  if (message.author.bot == true) {
+    return;
+  }
 
-    // se digitar "Vingadores"
-    if (message.content == "Vingadores") {
-        message.channel.send({
-            embed: {
-                color: "0099ff",
-                description: "Avante!",
-            },
-        });
-    }
+  // se digitar "Vingadores"
+  if (message.content == "Vingadores") {
+    message.channel.send({
+      embed: {
+        color: "0099ff",
+        description: "Avante!",
+      },
+    });
+  }
 
-    if (inCooldown.has(message.guild.id.concat(message.author.id)) && !(message.content.startsWith(process.env.PREFIX))) {
-        return;
+  if (message.guild != null) {
+    if (
+      inCooldown.has(message.guild.id.concat(message.author.id)) &&
+      !message.content.startsWith(process.env.PREFIX)
+    ) {
+      return;
     } else {
-        lC(client, database, message);
-        inCooldown.add(message.guild.id.concat(message.author.id));
-        setTimeout(() => inCooldown.delete(message.guild.id.concat(message.author.id)), 5000);
+      LevelingController.leveling(client, database, message);
+      inCooldown.add(message.guild.id.concat(message.author.id));
+      setTimeout(
+        () => inCooldown.delete(message.guild.id.concat(message.author.id)),
+        5000
+      );
     }
+  }
 
-    if (message.content.startsWith(process.env.PREFIX)) {
-        let command = require("./commands/command.js");
-        command(client, message, database, countCommands);
-    }
+  if (message.content.startsWith(process.env.PREFIX)) {
+    let command = require("./commands/command.js");
+    command(client, message, database, countCommands);
+  }
 });
 
 client.login(process.env.TOKEN);
