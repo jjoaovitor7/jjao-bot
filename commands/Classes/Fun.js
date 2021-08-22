@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const blackjack = require("discord-blackjack");
 class Fun {
   async avatar2braille(message) {
     const { braillefy } = require("img2braille");
