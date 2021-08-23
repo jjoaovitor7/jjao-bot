@@ -132,53 +132,62 @@ class Fun {
       "pt-br",
       "Empate!",
       `<@${client.user.id}> ganhou.`,
+      `${message.mentions.users.first()} ganhou.`,
       `<@${message.author.id}> ganhou.`,
+      "Partida iniciada ou há uma partida em andamento.",
       message,
       args[0]
     );
-    Jokenpo.play();
-    Jokenpo.send();
-    const result = Jokenpo.result();
-    if (result.player == false && result.bot == false) {
-    } else if (result.bot == true) {
-      let random = Math.floor(Math.random() * 6 + 1);
-      message.channel.send(`Você perdeu \`${random} coins\`!`);
-      database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", message.author.id)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (documentSnapshot) {
+
+    try {
+      Jokenpo.play().then(() => {
+        Jokenpo.send();
+
+        if (Jokenpo.getPlayersCount() === 1) {
+          const result = Jokenpo.result();
+          if (result.player == false && result.opponent == false) {
+          } else if (result.opponent == true) {
+            let random = Math.floor(Math.random() * 6 + 1);
+            message.channel.send(`Você perdeu \`${random} coins\`!`);
             database
               .collection("Usuarios")
               .doc(message.guild.id)
               .collection("Usuarios")
-              .doc(documentSnapshot.id)
-              .update({ money: documentSnapshot.data().money - random });
-          });
-        });
-    } else if (result.player == true) {
-      let random = Math.floor(Math.random() * 11 + 1);
-      message.channel.send(`Você ganhou \`${random} coins\`!`);
-      database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", message.author.id)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (documentSnapshot) {
+              .where("id", "==", message.author.id)
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (documentSnapshot) {
+                  database
+                    .collection("Usuarios")
+                    .doc(message.guild.id)
+                    .collection("Usuarios")
+                    .doc(documentSnapshot.id)
+                    .update({ money: documentSnapshot.data().money - random });
+                });
+              });
+          } else if (result.player == true) {
+            let random = Math.floor(Math.random() * 11 + 1);
+            message.channel.send(`Você ganhou \`${random} coins\`!`);
             database
               .collection("Usuarios")
               .doc(message.guild.id)
               .collection("Usuarios")
-              .doc(documentSnapshot.id)
-              .update({ money: documentSnapshot.data().money + random });
-          });
-        });
-    }
+              .where("id", "==", message.author.id)
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (documentSnapshot) {
+                  database
+                    .collection("Usuarios")
+                    .doc(message.guild.id)
+                    .collection("Usuarios")
+                    .doc(documentSnapshot.id)
+                    .update({ money: documentSnapshot.data().money + random });
+                });
+              });
+          }
+        }
+      });
+    } catch (TypeError) {}
   }
 
   risitas(message) {
