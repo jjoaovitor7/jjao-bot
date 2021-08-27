@@ -198,49 +198,6 @@ class Fun {
     message.channel.send("https://tenor.com/view/austin-sad-cat-gif-18483293");
   }
 
-  // snake(message) {
-  //   if (
-  //     message.member.guild.me.hasPermission("MANAGE_MESSAGES") &&
-  //     message.member.guild.me.hasPermission("ADD_REACTIONS")
-  //   ) {
-  //     const GameCord = require("gamecord").djs;
-  //     message.channel.send("Você(s) tem 30min.");
-  //     new GameCord.SnakeGame(message)
-  //       .setTitle("Jogo da Cobrinha")
-  //       .setColor("#00FF00")
-  //       .setTime(1800000)
-  //       // .on("end", (game) =>
-  //       //   console.log(
-  //       //     `${game.message.author.tag} score: ${game.score}`
-  //       //   )
-  //       // ) // Start event also exists
-  //       .run();
-  //   } else {
-  //     message.channel.send("Não tenho permissão pra isso =/");
-  //   }
-  // }
-
-  async rndimg(message, args) {
-    if (args[0] == null || args[0] == "") {
-      message.channel.send("Tente `jj rndimage [palavra]`.");
-    } else {
-      const GoogleImages = require("google-images");
-      const GoogleImagesClient = new GoogleImages(
-        process.env.GOOGLE_CSE_ID,
-        process.env.GOOGLE_API_KEY
-      );
-
-      let googleimage = await GoogleImagesClient.search(args[0], { page: 1 });
-      if (googleimage.length == 0) {
-        message.channel.send("Não foram encontradas imagens sobre isso =/");
-      } else {
-        message.channel.send(
-          googleimage[Math.floor(Math.random() * googleimage.length)].url
-        );
-      }
-    }
-  }
-
   rndnote(message) {
     let MidiWriter = require("midi-writer-js");
 

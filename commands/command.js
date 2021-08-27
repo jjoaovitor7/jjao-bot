@@ -38,7 +38,6 @@ module.exports = function command(client, message, database, countCommands) {
         connect4: () => Fun.connect4(message),
         cookie: () => Fun.cookie(message),
         jokenpo: () => Fun.jokenpo(database, client, message, args),
-        rndimg: () => Fun.rndimg(message, args),
         rndnote: () => Fun.rndnote(message),
         sadcat: () => Fun.sadcat(message),
         snake: () => Fun.snake(message),

@@ -60,7 +60,6 @@ let countCommands = {
   connect4: 0,
   cookie: 0,
   jokenpo: 0,
-  rndimg: 0,
   rndnote: 0,
   sadcat: 0,
   snake: 0,
