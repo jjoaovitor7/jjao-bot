@@ -127,26 +127,39 @@ class Fun {
 
   jokenpo(database, client, message, args) {
     const _Jokenpo = require("discord-jokenpo");
-    const Jokenpo = new _Jokenpo(
-      "Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`",
-      "pt-br",
-      "Empate!",
-      `<@${client.user.id}> ganhou.`,
-      `${message.mentions.users.first()} ganhou.`,
-      `<@${message.author.id}> ganhou.`,
-      "Partida iniciada ou há uma partida em andamento.",
-      message,
-      args[0]
-    );
+    const Jokenpo = new _Jokenpo(message, args[0]);
+
+    const messages = {
+      fail: "Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`",
+      gameResults: {
+        draw: "Empate!",
+        botWinner: `<@${client.user.id}> ganhou.`,
+        opponentWinner: `${message.mentions.users.first()} ganhou.`,
+        userWinner: `<@${message.author.id}> ganhou.`,
+      },
+      gameStatus: {
+        inProgress: "Partida iniciada ou há uma partida em andamento.",
+        cancel: "Partida cancelada.",
+      },
+      messageTo: {
+        user: "Aqui você digita a opção `[pedra | papel | tesoura]`.",
+        opponent: `O usuário ${message.author.username}#${message.author.discriminator} te desafiou para uma partida de jokenpo!
+        Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]\``,
+        timeout: "O tempo limite é de 60s.",
+      },
+    };
+
+    Jokenpo.setMessages(messages);
+    Jokenpo.setLang("pt-br");
 
     try {
       Jokenpo.play().then(() => {
         Jokenpo.send();
 
-        if (Jokenpo.getPlayersCount() === 1) {
+        if (Jokenpo.getPlayersCount() === 1 && message.guild !== null) {
           const result = Jokenpo.result();
-          if (result.player == false && result.opponent == false) {
-          } else if (result.opponent == true) {
+          if (result.player === false && result.opponent === false) {
+          } else if (result.opponent === true) {
             let random = Math.floor(Math.random() * 6 + 1);
             message.channel.send(`Você perdeu \`${random} coins\`!`);
             database
@@ -165,7 +178,7 @@ class Fun {
                     .update({ money: documentSnapshot.data().money - random });
                 });
               });
-          } else if (result.player == true) {
+          } else if (result.player === true) {
             let random = Math.floor(Math.random() * 11 + 1);
             message.channel.send(`Você ganhou \`${random} coins\`!`);
             database
