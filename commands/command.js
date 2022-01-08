@@ -47,7 +47,6 @@ module.exports = function command(client, message, database, countCommands) {
         // INFO
         bitcoinprice: () => Utils.bitcoinprice(message, args),
         botinfo: () => Info.botinfo(client, message),
-        brazilcovidcases: () => Info.covidbrazilcases(message),
         help: () => Utils.help(message),
         ping: () => Utils.ping(client, message),
         profile: () => Profile.profile(database, message, args),

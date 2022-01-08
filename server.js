@@ -10,7 +10,6 @@ const client = new Client({
 
 // modules
 const ShowController = require("./modules/ShowController.js");
-const LevelingController = require("./modules/LevelingController.js");
 
 let inCooldown = new Set();
 
@@ -27,6 +26,10 @@ const config = {
 };
 const app = firebase.initializeApp(config);
 const database = firebase.firestore(app);
+
+// Leveling
+const Leveling = require("discord-leveling-firebase");
+let leveling = new Leveling(client, database);
 
 // Discord
 client.on("ready", () => {
@@ -69,7 +72,6 @@ let countCommands = {
   // INFO
   bitcoinprice: 0,
   botinfo: 0,
-  brazilcovidcases: 0,
   help: 0,
   ping: 0,
   profile: 0,
@@ -114,7 +116,7 @@ client.on("message", async (message) => {
     ) {
       return;
     } else {
-      LevelingController.leveling(client, database, message);
+      leveling.leveling(message);
       inCooldown.add(message.guild.id.concat(message.author.id));
       setTimeout(
         () => inCooldown.delete(message.guild.id.concat(message.author.id)),

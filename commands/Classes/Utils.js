@@ -95,7 +95,6 @@ class Utils {
             name: "Info",
             value: `\`jj bitcoinprice\`
 \`jj botinfo\`
-\`jj brazilcovidcases\`
 \`jj help\`
 \`jj ping\`
 \`jj profile\`
