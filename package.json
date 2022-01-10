@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@discordjs/rest": "0.1.0-canary.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "canvacord": "^5.0.8",
     "discord-api-types": "^0.22.0",
     "discord-jokenpo": "^1.2.11",
