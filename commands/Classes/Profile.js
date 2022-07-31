@@ -1,4 +1,5 @@
-const Discord = require("discord.js");
+const { MessageEmbed, MessageAttachment } = require("discord.js");
+const { doc, getDoc } = require("firebase/firestore");
 
 class Profile {
   avatar(message) {
@@ -33,6 +34,13 @@ class Profile {
     }
   }
 
+  async #getUser(database, message) {
+    const guild = doc(database, "Usuarios", message.guild.id);
+    const member = doc(guild, "Usuarios", message.author.id);
+    const member_doc = await getDoc(member);
+    return member_doc.data();
+  }
+
   async profile(database, message, args) {
     function embedProfile(userinfo, profile) {
       if (profile == undefined || profile == undefined) {
@@ -42,77 +50,32 @@ class Profile {
       }
 
       return message.channel.send(
-        new Discord.MessageEmbed()
+        new MessageEmbed()
           .setColor("#0099ff")
           .setTitle(userinfo.username + "#" + userinfo.discriminator)
           .addFields(
-            { name: "Level", value: profile.level+1, inline: true },
-            { name: "Xp", value: profile.xp + `/${(profile.level+1)*100}`, inline: true },
+            { name: "Level", value: profile.level, inline: true },
+            { name: "Xp", value: profile.xp + `/${(profile.level + 1) * 100}`, inline: true },
             { name: "Saldo", value: profile.money + " moedas" }
           )
           .setThumbnail(
             "https://cdn.discordapp.com/avatars/" +
-              userinfo.id +
-              "/" +
-              userinfo.avatar +
-              ".png?size=1024"
+            userinfo.id +
+            "/" +
+            userinfo.avatar +
+            ".png?size=1024"
           )
       );
     }
 
-    function getDocUser(userinfo) {
-      return database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", userinfo.id)
-        .get();
-    }
-
+    const profile = await this.#getUser(database, message);
     if (args[0] == null || args[0] == "") {
-      function getData() {
-        return getDocUser(message.author).then(function (querySnapshot) {
-          let profile;
-          querySnapshot.forEach(function (documentSnapshot) {
-            profile = documentSnapshot.data();
-          });
-          return profile;
-        });
-      }
-
-      let profile = await getData();
-
       embedProfile(message.author, profile);
     } else {
       let user = message.mentions.users.first();
-
       if (user == undefined) {
-        function getData() {
-          return getDocUser(message.author).then(function (querySnapshot) {
-            let profile;
-            querySnapshot.forEach(function (documentSnapshot) {
-              profile = documentSnapshot.data();
-            });
-            return profile;
-          });
-        }
-
-        let profile = await getData();
-
         embedProfile(message.author, profile);
       } else {
-        function getData() {
-          return getDocUser(user).then(function (querySnapshot) {
-            let profile;
-            querySnapshot.forEach(function (documentSnapshot) {
-              profile = documentSnapshot.data();
-            });
-            return profile;
-          });
-        }
-
-        let profile = await getData();
-
         embedProfile(user, profile);
       }
     }
@@ -121,26 +84,7 @@ class Profile {
   async profilecard(database, message) {
     const canvacord = require("canvacord");
 
-    function getDocUser(userinfo) {
-      return database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", userinfo.id)
-        .get();
-    }
-
-    function getData() {
-      return getDocUser(message.author).then(function (querySnapshot) {
-        let profile;
-        querySnapshot.forEach(function (documentSnapshot) {
-          profile = documentSnapshot.data();
-        });
-        return profile;
-      });
-    }
-
-    let data = await getData();
+    let data = await this.#getUser(database, message);
     let xp = data.xp;
     let level = data.level;
     let money = data.money;
@@ -148,21 +92,21 @@ class Profile {
     const rankCard = new canvacord.Rank()
       .setAvatar(
         "https://cdn.discordapp.com/avatars/" +
-          message.author.id +
-          "/" +
-          message.author.avatar +
-          ".png?size=1024"
+        message.author.id +
+        "/" +
+        message.author.avatar +
+        ".png?size=1024"
       )
       .setCurrentXP(xp)
-      .setRequiredXP((level+1)*100)
-      .setLevel(level+1)
+      .setRequiredXP((level + 1) * 100)
+      .setLevel(level)
       .setRank(money, "SALDO (Moedas)", true)
       .setProgressBar("#fff", "COLOR")
       .setUsername(message.author.username)
       .setDiscriminator(message.author.discriminator);
 
     rankCard.build().then((data) => {
-      const attachment = new Discord.MessageAttachment(data, "rank.png");
+      const attachment = new MessageAttachment(data, "rank.png");
       message.channel.send(attachment);
     });
   }

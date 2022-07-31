@@ -1,5 +1,6 @@
-const Discord = require("discord.js");
-const blackjack = require("discord-blackjack");
+const { doc, updateDoc, getDoc } = require("firebase/firestore");
+
+const { MessageAttachment } = require("discord.js");
 class Fun {
   async avatar2braille(message) {
     const { braillefy } = require("img2braille");
@@ -13,10 +14,10 @@ class Fun {
 
     const imgbraille = await braillefy(
       "https://cdn.discordapp.com/avatars/" +
-        user.id +
-        "/" +
-        user.avatar +
-        ".png?size=1024",
+      user.id +
+      "/" +
+      user.avatar +
+      ".png?size=1024",
       20, // width
       options
     );
@@ -31,13 +32,13 @@ class Fun {
 
       canvacord.Canvas.pixelate(
         "https://cdn.discordapp.com/avatars/" +
-          user.id +
-          "/" +
-          user.avatar +
-          ".png?size=1024",
+        user.id +
+        "/" +
+        user.avatar +
+        ".png?size=1024",
         5
       ).then(function (img) {
-        const attachment = new Discord.MessageAttachment(img, "pixel.png");
+        const attachment = new MessageAttachment(img, "pixel.png");
         message.channel.send(attachment);
       });
     } else {
@@ -45,13 +46,13 @@ class Fun {
 
       canvacord.Canvas.pixelate(
         "https://cdn.discordapp.com/avatars/" +
-          message.author.id +
-          "/" +
-          message.author.avatar +
-          ".png?size=1024",
+        message.author.id +
+        "/" +
+        message.author.avatar +
+        ".png?size=1024",
         5
       ).then(function (img) {
-        const attachment = new Discord.MessageAttachment(img, "pixel.png");
+        const attachment = new MessageAttachment(img, "pixel.png");
         message.channel.send(attachment);
       });
     }
@@ -65,13 +66,13 @@ class Fun {
 
       canvacord.Canvas.circle(
         "https://cdn.discordapp.com/avatars/" +
-          user.id +
-          "/" +
-          user.avatar +
-          ".png?size=1024",
+        user.id +
+        "/" +
+        user.avatar +
+        ".png?size=1024",
         5
       ).then(function (img) {
-        const attachment = new Discord.MessageAttachment(img, "circle.png");
+        const attachment = new MessageAttachment(img, "circle.png");
         message.channel.send(attachment);
       });
     } else {
@@ -79,13 +80,13 @@ class Fun {
 
       canvacord.Canvas.circle(
         "https://cdn.discordapp.com/avatars/" +
-          message.author.id +
-          "/" +
-          message.author.avatar +
-          ".png?size=1024",
+        message.author.id +
+        "/" +
+        message.author.avatar +
+        ".png?size=1024",
         5
       ).then(function (img) {
-        const attachment = new Discord.MessageAttachment(img, "circle.png");
+        const attachment = new MessageAttachment(img, "circle.png");
         message.channel.send(attachment);
       });
     }
@@ -154,7 +155,7 @@ class Fun {
     Jokenpo.setLang("pt-br");
 
     try {
-      Jokenpo.play().then(() => {
+      Jokenpo.play().then(async () => {
         Jokenpo.send();
 
         if (Jokenpo.getPlayersCount() === 1 && message.guild !== null) {
@@ -163,45 +164,29 @@ class Fun {
           } else if (result.opponent === true) {
             let random = Math.floor(Math.random() * 6 + 1);
             message.channel.send(`Você perdeu \`${random} coins\`!`);
-            database
-              .collection("Usuarios")
-              .doc(message.guild.id)
-              .collection("Usuarios")
-              .where("id", "==", message.author.id)
-              .get()
-              .then(function (querySnapshot) {
-                querySnapshot.forEach(function (documentSnapshot) {
-                  database
-                    .collection("Usuarios")
-                    .doc(message.guild.id)
-                    .collection("Usuarios")
-                    .doc(documentSnapshot.id)
-                    .update({ money: documentSnapshot.data().money - random });
-                });
-              });
+
+            const guild = doc(database, "Usuarios", message.guild.id);
+            const user = doc(guild, "Usuarios", message.author.id);
+            const user_doc = await getDoc(user);
+
+            updateDoc(user, {
+              money: user_doc.data().money - random
+            });
           } else if (result.player === true) {
             let random = Math.floor(Math.random() * 11 + 1);
             message.channel.send(`Você ganhou \`${random} coins\`!`);
-            database
-              .collection("Usuarios")
-              .doc(message.guild.id)
-              .collection("Usuarios")
-              .where("id", "==", message.author.id)
-              .get()
-              .then(function (querySnapshot) {
-                querySnapshot.forEach(function (documentSnapshot) {
-                  database
-                    .collection("Usuarios")
-                    .doc(message.guild.id)
-                    .collection("Usuarios")
-                    .doc(documentSnapshot.id)
-                    .update({ money: documentSnapshot.data().money + random });
-                });
-              });
+
+            const guild = doc(database, "Usuarios", message.guild.id);
+            const user = doc(guild, "Usuarios", message.author.id);
+            const user_doc = await getDoc(user);
+
+            updateDoc(user, {
+              money: user_doc.data().money + random
+            });
           }
         }
       });
-    } catch (TypeError) {}
+    } catch (TypeError) { }
   }
 
   risitas(message) {
@@ -246,11 +231,11 @@ class Fun {
       "G5",
       "Gb5",
     ];
-    let notesAux = [];
+    let notes_arr = [];
 
-    notesAux.push(notes[Math.floor(Math.random() * (notes.length - 1))]);
+    notes_arr.push(notes[Math.floor(Math.random() * (notes.length - 1))]);
     track.addEvent(
-      new MidiWriter.NoteEvent({ pitch: notesAux, duration: "8" })
+      new MidiWriter.NoteEvent({ pitch: notes_arr, duration: "8" })
     );
 
     let writer = new MidiWriter.Writer(track);
@@ -272,7 +257,7 @@ class Fun {
         .catch(function (error) {
           console.log(error);
         })
-        .then(function () {});
+        .then(function () { });
     }
   }
 }

@@ -1,105 +1,85 @@
-const Discord = require("discord.js");
-const ms = require("parse-ms");
+// const { MessageEmbed } = require("discord.js");
+// const ms = require("parse-ms");
+const { doc, getDoc, updateDoc } = require("firebase/firestore");
 
-function getDocUser(database, message, userinfo) {
-  return database
-    .collection("Usuarios")
-    .doc(message.guild.id)
-    .collection("Usuarios")
-    .where("id", "==", userinfo.id)
-    .get();
-}
+// async function addBonus(database, message, type) {
+//   let qtde = Math.floor(Math.random() * 50) + 1;
+//   message.channel.send(
+//     new MessageEmbed()
+//       .setColor("#0099ff")
+//       .addField(`Moedas do ${type}`, qtde + " moedas.")
+//   );
 
-function getData(database, message) {
-  return getDocUser(database, message, message.author).then(function (
-    querySnapshot
-  ) {
-    let profile;
-    querySnapshot.forEach(function (documentSnapshot) {
-      profile = documentSnapshot.data();
-    });
-    return profile;
-  });
-}
+//   const guild = doc(database, "Usuarios", message.guild.id);
+//   const user = doc(guild, "Usuarios", message.author.id);
+//   const user_doc = await getDoc(user);
 
-function addBonus(database, message, type) {
-  let qtde = Math.floor(Math.random() * 50) + 1;
-  message.channel.send(
-    new Discord.MessageEmbed()
-      .setColor("#0099ff")
-      .addField(`Moedas do ${type}`, qtde + " moedas.")
-  );
-  database
-    .collection("Usuarios")
-    .doc(message.guild.id)
-    .collection("Usuarios")
-    .where("id", "==", message.author.id)
-    .get()
-    .then(function (querySnapshot) {
-      querySnapshot.forEach(function (documentSnapshot) {
-        database
-          .collection("Usuarios")
-          .doc(message.guild.id)
-          .collection("Usuarios")
-          .doc(documentSnapshot.id)
-          .update({
-            money: documentSnapshot.data().money + qtde,
-            daily: Date.now(),
-          });
-      });
-    });
-}
+//   updateDoc(user, {
+//     money: user_doc.data().money + qtde,
+//     daily: Date.now(),
+//   });
+// }
+
+// const timeout = {
+//     "day": 86400000,
+//     "week": 604800000,
+//     "month": 2592000000,
+// }
 
 class Balance {
-  async daily(database, message) {
-    const timeout = 86400000; // 24 horas em milisegundos
-    let data = await getData(database, message);
-    let daily = data.daily;
-
-    let dailyAux = daily;
-    if (dailyAux != 0 && timeout - (Date.now() - daily) > 0) {
-      let time = ms(timeout - (Date.now() - daily));
-      message.reply(
-        `você já pegou suas moedas do dia.\nVocê precisa esperar ${time.hours}h ${time.minutes}m ${time.seconds}s para poder pegar novamente.`
-      );
-    } else {
-      addBonus(database, message, "Dia");
-    }
+  async #getUser(database, message) {
+    const guild = doc(database, "Usuarios", message.guild.id);
+    const member = doc(guild, "Usuarios", message.author.id);
+    const member_doc = await getDoc(member);
+    return member_doc.data();
   }
 
-  async weekly(database, message) {
-    const timeout = 604800000; // 7 dias em milisegundos
-    let data = await getData(database, message);
-    let weekly = data.weekly;
+  // async daily(database, message) {
+  //   let data = await this.#getUser(database, message);
+  //   let daily = data.daily;
 
-    let weeklyAux = weekly;
-    if (weeklyAux != 0 && timeout - (Date.now() - weekly) > 0) {
-      let time = ms(timeout - (Date.now() - weekly));
-      message.reply(
-        `você já pegou suas moedas da semana.\nVocê precisa esperar ${time.days}d ${time.hours}h ${time.minutes}m ${time.seconds}s para poder pegar novamente.`
-      );
-    } else {
-      addBonus(database, message, "Semana");
-    }
-  }
+  //   const calc = timeout.day - (Date.now() - daily);
+  //   if (daily != 0 && calc > 0) {
+  //     let time = ms(calc);
+  //     message.reply(
+  //       `você já pegou suas moedas do dia.\nVocê precisa esperar ${time.hours}h ${time.minutes}m ${time.seconds}s para poder pegar novamente.`
+  //     );
+  //   } else {
+  //     addBonus(database, message, "Dia");
+  //   }
+  // }
 
-  async monthly(database, message) {
-    const timeout = 2592000000; // 30 dias em milisegundos
-    let data = await getData(database, message);
-    let monthly = data.monthly;
+  // async weekly(database, message) {
+  //   let data = await this.#getUser(database, message);
+  //   let weekly = data.weekly;
 
-    let monthlyAux = monthly;
-    if (monthlyAux != 0 && timeout - (Date.now() - monthly) > 0) {
-      let time = ms(timeout - (Date.now() - monthly));
-      message.reply(
-        `você já pegou suas moedas do mês.\nVocê precisa esperar ${time.days}d ${time.hours}h ${time.minutes}m ${time.seconds}s para poder pegar novamente.`
-      );
-    } else {
-      addBonus(database, message, "Mês");
-    }
-  }
+  //   const calc = timeout.week - (Date.now() - daily);
+  //   if (weekly != 0 && calc > 0) {
+  //     let time = ms(calc);
+  //     message.reply(
+  //       `você já pegou suas moedas da semana.\nVocê precisa esperar ${time.days}d ${time.hours}h ${time.minutes}m ${time.seconds}s para poder pegar novamente.`
+  //     );
+  //   } else {
+  //     addBonus(database, message, "Semana");
+  //   }
+  // }
 
-  transfer(database, message, args) {
+  // async monthly(database, message) {
+  //   let data = await this.#getUser(database, message);
+  //   let monthly = data.monthly;
+
+  //   let calc = timeout.month - (Date.now() - monthly);
+  //   if (monthly != 0 &&  calc > 0) {
+  //     let time = ms(calc);
+  //     message.reply(
+  //       `você já pegou suas moedas do mês.\nVocê precisa esperar ${time.days}d ${time.hours}h ${time.minutes}m ${time.seconds}s para poder pegar novamente.`
+  //     );
+  //   } else {
+  //     addBonus(database, message, "Mês");
+  //   }
+  // }
+
+  async transfer(database, message, args) {
     let toTransfer = message.mentions.users.first();
     args[0] = parseInt(args[0]);
     if (
@@ -110,54 +90,29 @@ class Balance {
       toTransfer.bot == false &&
       Number.isInteger(args[0])
     ) {
-      database
-        .collection("Usuarios")
-        .doc(message.guild.id)
-        .collection("Usuarios")
-        .where("id", "==", message.author.id)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(async function (docSnapshot) {
-            if (args[0] <= docSnapshot.data().money) {
-              database
-                .collection("Usuarios")
-                .doc(message.guild.id)
-                .collection("Usuarios")
-                .doc(docSnapshot.id)
-                .update({
-                  money: docSnapshot.data().money - args[0],
-                });
+      const guild = doc(database, "Usuarios", message.guild.id);
+      const user = doc(guild, "Usuarios", message.author.id);
+      const user_doc = await getDoc(user);
+      const otheruser = doc(guild, "Usuarios", toTransfer.id);
+      const otheruser_doc = await getDoc(otheruser);
 
-              database
-                .collection("Usuarios")
-                .doc(message.guild.id)
-                .collection("Usuarios")
-                .where("id", "==", toTransfer.id)
-                .get()
-                .then(function (querySnapshot) {
-                  querySnapshot.forEach(function (docSnapshot) {
-                    database
-                      .collection("Usuarios")
-                      .doc(message.guild.id)
-                      .collection("Usuarios")
-                      .doc(docSnapshot.id)
-                      .update({
-                        money: docSnapshot.data().money + args[0],
-                      })
-                      .then(() => {
-                        message.channel.send(
-                          `Transferência de \`${parseInt(
-                            args[0]
-                          )} moeda(s)\` concluída.`
-                        );
-                      });
-                  });
-                });
-            } else {
-              message.reply("você não possui essa quantia de moedas.");
-            }
+      if (args[0] <= user_doc.data().money) {
+        updateDoc(user, {
+          money: user_doc.data().money - args[0],
+        }).then(() => {
+          updateDoc(otheruser, {
+            money: otheruser_doc.data().money + args[0],
+          }).then(() => {
+            message.channel.send(
+              `Transferência de \`${parseInt(
+                args[0]
+              )} moeda(s)\` concluída.`
+            );
           });
-        });
+        })
+      } else {
+        message.reply("você não possui essa quantia de moedas.");
+      }
     } else {
       message.channel.send("Tente \`jj transfer [quantia] [usuario]\`.");
     }

@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const moment = require("moment");
 require("moment-duration-format");
 const QuickChart = require("quickchart-js");
@@ -11,7 +11,7 @@ class Info {
     let memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
 
     message.channel.send(
-      new Discord.MessageEmbed()
+      new MessageEmbed()
         .setColor("#0099ff")
         .setTitle("Informações do Bot")
         .addField("Usuários", client.users.cache.size, true)
@@ -30,15 +30,15 @@ class Info {
 
   serverinfo(message) {
     message.channel.send(
-      new Discord.MessageEmbed()
+      new MessageEmbed()
         .setTimestamp()
         .setTitle(`${message.guild.name}`)
         .setThumbnail(
           "https://cdn.discordapp.com/icons/" +
-            message.guild.id +
-            "/" +
-            message.guild.icon +
-            ".png?size=1024"
+          message.guild.id +
+          "/" +
+          message.guild.icon +
+          ".png?size=1024"
         )
         .addField("Região do Servidor", message.guild.region, true)
         .addField("Membros", message.guild.memberCount, true)
@@ -49,7 +49,7 @@ class Info {
 
   // userinfo(message) {
   //   message.channel.send(
-  //     new Discord.MessageEmbed()
+  //     new MessageEmbed()
   //       .setTimestamp()
   //       .setTitle(`${message.author.username}#${message.author.discriminator}`)
   //       .setThumbnail(
@@ -68,11 +68,11 @@ class Info {
   // }
 
   countCommands(message, countCommands) {
-    let auxGraph1 = [];
-    let auxGraph2 = [];
+    let data_command = [];
+    let data_value = [];
     for (let command in countCommands) {
-      auxGraph1.push(command);
-      auxGraph2.push(parseInt(countCommands[command]));
+      data_command.push(command);
+      data_value.push(parseInt(countCommands[command]));
     }
 
     let chart = new QuickChart();
@@ -80,11 +80,11 @@ class Info {
       .setConfig({
         type: "horizontalBar",
         data: {
-          labels: auxGraph1,
+          labels: data_command,
           datasets: [
             {
               label: "Quantidade de Uso de Comandos (Geral)",
-              data: auxGraph2,
+              data: data_value,
               backgroundColor: "#006400",
             },
           ],
