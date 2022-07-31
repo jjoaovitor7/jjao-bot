@@ -1,9 +1,8 @@
-require("dotenv").config();
+require("dotenv").config({path: ".env"});
 
 const { Client, Intents } = require("discord.js");
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS],
-  disableEveryone: true,
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
 });
 
 const ShowController = require("./modules/ShowController.js");
@@ -27,7 +26,7 @@ client.on("ready", () => {
 let countCommands = {
   avatar: 0,
   avatar2braille: 0,
-  avatar2circle: 0,
+  // avatar2circle: 0,
   avatar2pixel: 0,
   disablelevelingchannel: 0,
   discord: 0,
@@ -52,7 +51,7 @@ let countCommands = {
   sadcat: 0,
   snake: 0,
   risitas: 0,
-  word2ascii: 0,
+  // word2ascii: 0,
 
   // INFO
   bitcoinprice: 0,
@@ -73,7 +72,7 @@ let countCommands = {
   setinrole: 0,
 };
 
-client.on("message", async (message) => {
+client.on("messageCreate", async (message) => {
   // se a mensagem for do próprio bot, ignore-a
   if (message.author.id == client.user.id) {
     return;

@@ -1,6 +1,6 @@
+const { MessageAttachment, MessageEmbed } = require("discord.js");
 const { doc, updateDoc, getDoc } = require("firebase/firestore");
 
-const { MessageAttachment } = require("discord.js");
 class Fun {
   async avatar2braille(message) {
     const { braillefy } = require("img2braille");
@@ -12,13 +12,8 @@ class Fun {
 
     let user = message.mentions.users.first();
 
-    const imgbraille = await braillefy(
-      "https://cdn.discordapp.com/avatars/" +
-      user.id +
-      "/" +
-      user.avatar +
-      ".png?size=1024",
-      20, // width
+    const imgbraille = await braillefy(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`
+      , 20, // width
       options
     );
 
@@ -31,77 +26,58 @@ class Fun {
       const canvacord = require("canvacord");
 
       canvacord.Canvas.pixelate(
-        "https://cdn.discordapp.com/avatars/" +
-        user.id +
-        "/" +
-        user.avatar +
-        ".png?size=1024",
+        `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`,
         5
       ).then(function (img) {
         const attachment = new MessageAttachment(img, "pixel.png");
-        message.channel.send(attachment);
+        message.channel.send({files: [attachment]});
       });
     } else {
       const canvacord = require("canvacord");
+
 
       canvacord.Canvas.pixelate(
-        "https://cdn.discordapp.com/avatars/" +
-        message.author.id +
-        "/" +
-        message.author.avatar +
-        ".png?size=1024",
+        `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=1024`,
         5
       ).then(function (img) {
         const attachment = new MessageAttachment(img, "pixel.png");
-        message.channel.send(attachment);
+        message.channel.send({files: [attachment]});
       });
     }
   }
 
-  avatar2circle(message) {
-    let user = message.mentions.users.first();
+  // avatar2circle(message) {
+  //   let user = message.mentions.users.first();
 
-    if (user != undefined) {
-      const canvacord = require("canvacord");
+  //   if (user != undefined) {
+  //     const canvacord = require("canvacord");
 
-      canvacord.Canvas.circle(
-        "https://cdn.discordapp.com/avatars/" +
-        user.id +
-        "/" +
-        user.avatar +
-        ".png?size=1024",
-        5
-      ).then(function (img) {
-        const attachment = new MessageAttachment(img, "circle.png");
-        message.channel.send(attachment);
-      });
-    } else {
-      const canvacord = require("canvacord");
+  //     canvacord.Canvas.circle(
+  //       `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`,
+  //       5
+  //     ).then(function (img) {
+  //       const attachment = new MessageAttachment(img, "circle.png");
+  //       message.channel.send({ files: [attachment] });
+  //     });
+  //   } else {
+  //     const canvacord = require("canvacord");
 
-      canvacord.Canvas.circle(
-        "https://cdn.discordapp.com/avatars/" +
-        message.author.id +
-        "/" +
-        message.author.avatar +
-        ".png?size=1024",
-        5
-      ).then(function (img) {
-        const attachment = new MessageAttachment(img, "circle.png");
-        message.channel.send(attachment);
-      });
-    }
-  }
+  //     canvacord.Canvas.circle(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=1024`,
+  //       5
+  //     ).then(function (img) {
+  //       const attachment = new MessageAttachment(img, "circle.png");
+  //       message.channel.send({ files: [attachment] });
+  //     });
+  //   }
+  // }
 
   clap(message) {
     message.channel.send({
-      embed: {
-        image: {
-          url: "https://cdn.pixabay.com/photo/2019/07/17/02/59/applause-4342965_960_720.jpg",
-        },
-        footer: {
-          text: "https://pixabay.com/pt/illustrations/aplausos-mãos-bater-palmas-black-4342965/",
-        },
-      },
+      embeds: [
+        new MessageEmbed()
+          .setImage("https://cdn.pixabay.com/photo/2019/07/17/02/59/applause-4342965_960_720.jpg")
+          .setFooter({ "text": "https://pixabay.com/pt/illustrations/aplausos-mãos-bater-palmas-black-4342965/" })
+      ]
     });
   }
 
@@ -112,14 +88,11 @@ class Fun {
       .get("https://helloacm.com/api/fortune/")
       .then(function (response) {
         message.channel.send({
-          embed: {
-            description:
-              ":fortune_cookie: Biscoito da Sorte (em inglês)\n" +
-              response.data,
-            footer: {
-              text: "https://helloacm.com/api/fortune/",
-            },
-          },
+          embeds: [
+            new MessageEmbed()
+              .setDescription(`:fortune_cookie: Biscoito da Sorte (em inglês)\n ${response.data}`)
+              .setFooter({ "text": "https://helloacm.com/api/fortune/" })
+          ]
         });
       })
       .catch(function (error) {
@@ -129,7 +102,6 @@ class Fun {
 
   jokenpo(database, client, message, args) {
     const _Jokenpo = require("discord-jokenpo");
-    const Jokenpo = new _Jokenpo(message, args[0]);
 
     const messages = {
       fail: "Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`",
@@ -151,6 +123,7 @@ class Fun {
       },
     };
 
+    const Jokenpo = new _Jokenpo(message, args[0]);
     Jokenpo.setMessages(messages);
     Jokenpo.setLang("pt-br");
 
@@ -240,26 +213,26 @@ class Fun {
 
     let writer = new MidiWriter.Writer(track);
     writer.saveMIDI("note");
-    message.channel.send(null, {
+    message.channel.send({
       files: ["note.mid"],
     });
   }
 
-  word2ascii(message, args) {
-    if (args != null && args != "" && args != " ") {
-      const axios = require("axios");
+  // word2ascii(message, args) {
+  //   if (args != null && args != "" && args != " ") {
+  //     const axios = require("axios");
 
-      axios
-        .get(`https://artii.herokuapp.com/make?text=${args[0]}`)
-        .then(function (response) {
-          message.channel.send(`\`\`\`${response.data}\`\`\``);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () { });
-    }
-  }
+  //     axios
+  //       .get(`https://artii.herokuapp.com/make?text=${args[0]}`)
+  //       .then(function (response) {
+  //         message.channel.send(`\`\`\`${response.data}\`\`\``);
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       })
+  //       .then(function () { });
+  //   }
+  // }
 }
 
 module.exports = new Fun();

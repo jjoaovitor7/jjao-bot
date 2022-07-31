@@ -1,3 +1,4 @@
+const { MessageEmbed } = require("discord.js");
 const { collection, getDocs, limit, orderBy, query } = require("firebase/firestore");
 
 class Ranking {
@@ -12,11 +13,12 @@ class Ranking {
     }
 
     message.channel.send({
-      embed: {
-        color: "0099ff",
-        title: "Ranking de XP (do servidor)",
-        description: arr.join(" ").toString(),
-      },
+      embeds: [
+        new MessageEmbed()
+        .setColor("0099ff")
+        .setTitle("Ranking de XP (do servidor)")
+        .setDescription(arr.join(" ").toString())
+      ]
     });
   }
 
@@ -31,11 +33,12 @@ class Ranking {
     }
 
     message.channel.send({
-      embed: {
-        color: "ffd700",
-        title: "Ranking de Moedas (do servidor)",
-        description: arr.join(" ").toString(),
-      },
+      embeds: [
+        new MessageEmbed()
+        .setColor("ffd700")
+        .setTitle("Ranking de Moedas (do servidor)")
+        .setDescription(arr.join(" ").toString())
+      ]
     });
   }
 }
