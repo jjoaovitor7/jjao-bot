@@ -27,7 +27,7 @@ module.exports = function command(client, message, countCommands) {
         // GERAL
         avatar: () => Profile.avatar(message),
         avatar2braille: () => Fun.avatar2braille(message),
-        avatar2circle: () => Fun.avatar2circle(message),
+        // avatar2circle: () => Fun.avatar2circle(message),
         avatar2pixel: () => Fun.avatar2pixel(message),
         disablelevelingchannel: () => Utils.disablelevelingchannel(db, message),
         discord: () => Utils.discord(message),
@@ -54,7 +54,7 @@ module.exports = function command(client, message, countCommands) {
         sadcat: () => Fun.sadcat(message),
         snake: () => Fun.snake(message),
         risitas: () => Fun.risitas(message),
-        word2ascii: () => Fun.word2ascii(message, args),
+        // word2ascii: () => Fun.word2ascii(message, args),
 
         // INFO
         bitcoinprice: () => Utils.bitcoinprice(message, args),

@@ -5,50 +5,62 @@ const QuickChart = require("quickchart-js");
 
 class Info {
   botinfo(client, message) {
-    let duration = moment
-      .duration(client.uptime)
+    const duration = moment.duration(client.uptime)
       .format("D[dia(s)], H[hora(s)], m[min], s[s]");
-    let memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
+    const memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
 
-    message.channel.send(
-      new MessageEmbed()
-        .setColor("#0099ff")
-        .setTitle("Informações do Bot")
-        .addField("Usuários", client.users.cache.size, true)
-        .addField("Servidores", client.guilds.cache.size, true)
-        .addField("Criado em", "15 nov. 2020", true)
-        .addField(
-          "Uso de memória",
-          Math.round(memoryUsed * 100) / 100 + "MB",
-          true
-        )
-        .addField("Uptime", duration, true)
-        .setFooter(`ID: ${client.user.id}`)
-        .setTimestamp()
-    );
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setColor("#0099ff")
+          .setTitle("Informações do Bot")
+          .addFields(
+            { name: "Usuários", value: String(client.users.cache.size), inline: true },
+            { name: "Servidores", value: String(client.guilds.cache.size), inline: true },
+            { name: "Criado em", value: "15 nov. 2020", inline: true },
+            {
+              name: "Uso de memória",
+              value: Math.round(memoryUsed * 100) / 100 + "MB",
+              inline: true
+            },
+            { name: "Uptime", value: duration, inline: true }
+          )
+          .setFooter({ "text": `ID: ${client.user.id}` })
+          .setTimestamp()
+      ]
+    });
+
   }
 
-  serverinfo(message) {
-    message.channel.send(
-      new MessageEmbed()
-        .setTimestamp()
-        .setTitle(`${message.guild.name}`)
-        .setThumbnail(
-          "https://cdn.discordapp.com/icons/" +
-          message.guild.id +
-          "/" +
-          message.guild.icon +
-          ".png?size=1024"
-        )
-        .addField("Região do Servidor", message.guild.region, true)
-        .addField("Membros", message.guild.memberCount, true)
-        .addField("Criado em", moment(message.guild.createdAt).format("LL"))
-        .setFooter(`ID: ${message.guild.id}`)
-    );
+  async serverinfo(message) {
+    const members = await message.guild.members.fetch();
+    const users = members.filter(member => !member.user.bot);
+    const bots = members.filter(member => member.user.bot);
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setTimestamp()
+          .setTitle(`${message.guild.name}`)
+          .setThumbnail(
+            "https://cdn.discordapp.com/icons/" +
+            message.guild.id +
+            "/" +
+            message.guild.icon +
+            ".png?size=1024"
+          )
+          .addFields(
+            { name: "Região do Servidor", value: message.guild.preferredLocale, inline: true },
+            { name: "Usuários", value: String(users.size), inline: true },
+            { name: "Bots", value: String(bots.size), inline: true },
+            { name: "Criado em", value: moment(message.guild.createdAt).format("LL") }
+          )
+          .setFooter({ "text": `ID: ${message.guild.id}` })
+      ]
+    });
   }
 
   // userinfo(message) {
-  //   message.channel.send(
+  //   message.channel.send({embeds: [
   //     new MessageEmbed()
   //       .setTimestamp()
   //       .setTitle(`${message.author.username}#${message.author.discriminator}`)
@@ -59,12 +71,9 @@ class Info {
   //           message.author.avatar +
   //           ".png?size=1024"
   //       )
-  //       .addField(
-  //         "Criado em",
-  //         moment.utc(message.author.createdAt).format("LL")
-  //       )
-  //       .setFooter(`ID: ${message.author.id}`)
-  //   );
+  //       .addFields({name: "Criado em", value: moment.utc(message.author.createdAt).format("LL")})
+  //       .setFooter({"text": `ID: ${message.author.id}`})
+  //   ]});
   // }
 
   countCommands(message, countCommands) {
@@ -108,14 +117,11 @@ class Info {
       .setHeight(1024);
 
     message.channel.send({
-      embed: {
-        title: "Quantidade de Uso de Comandos",
-        description:
-          "obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.",
-        image: {
-          url: chart.getUrl(),
-        },
-      },
+      embeds: [
+        new MessageEmbed().setTitle("Quantidade de Uso de Comandos")
+        .setDescription("obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.")
+        .setImage(chart.getUrl())
+      ]
     });
   }
 }

@@ -5,23 +5,11 @@ class Profile {
   avatar(message) {
     function sendAvatar(userinfo) {
       message.channel.send({
-        embed: {
-          image: {
-            url:
-              "https://cdn.discordapp.com/avatars/" +
-              userinfo.id +
-              "/" +
-              userinfo.avatar +
-              ".png?size=1024",
-          },
-          footer: {
-            text:
-              "Solicitado por " +
-              message.author.username +
-              "#" +
-              message.author.discriminator,
-          },
-        },
+        embeds: [
+          new MessageEmbed()
+            .setImage(`https://cdn.discordapp.com/avatars/${userinfo.id}/${userinfo.avatar}.png?size=1024`)
+            .setFooter({ "text": `Solicitado por ${message.author.username}#${message.author.discriminator}` })
+        ],
       });
     }
 
@@ -49,23 +37,20 @@ class Profile {
         );
       }
 
-      return message.channel.send(
-        new MessageEmbed()
-          .setColor("#0099ff")
-          .setTitle(userinfo.username + "#" + userinfo.discriminator)
-          .addFields(
-            { name: "Level", value: profile.level, inline: true },
-            { name: "Xp", value: profile.xp + `/${(profile.level + 1) * 100}`, inline: true },
-            { name: "Saldo", value: profile.money + " moedas" }
-          )
-          .setThumbnail(
-            "https://cdn.discordapp.com/avatars/" +
-            userinfo.id +
-            "/" +
-            userinfo.avatar +
-            ".png?size=1024"
-          )
-      );
+      return message.channel.send({
+        embeds: [
+          new MessageEmbed()
+            .setColor("#0099ff")
+            .setTitle(userinfo.username + "#" + userinfo.discriminator)
+            .addFields(
+              { name: "Level", value: String(profile.level), inline: true },
+              { name: "Xp", value: String(`${profile.xp}/${(profile.level + 1) * 100}`), inline: true },
+              { name: "Saldo", value: String(profile.money) + " moedas" }
+            )
+            .setThumbnail(`https://cdn.discordapp.com/avatars/${userinfo.id}/${userinfo.avatar}.png?size=1024`
+            )
+        ]
+      });
     }
 
     const profile = await this.#getUser(database, message);
@@ -107,7 +92,7 @@ class Profile {
 
     rankCard.build().then((data) => {
       const attachment = new MessageAttachment(data, "rank.png");
-      message.channel.send(attachment);
+      message.channel.send({ files: [attachment] });
     });
   }
 }

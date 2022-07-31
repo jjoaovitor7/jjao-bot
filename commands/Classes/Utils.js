@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { doc, onSnapshot, updateDoc, deleteField, getDoc } = require("firebase/firestore");
+const { doc, updateDoc, deleteField, getDoc } = require("firebase/firestore");
 
 class Utils {
   bitcoinprice(message, args) {
@@ -14,14 +14,10 @@ class Utils {
         .get("https://blockchain.info/ticker")
         .then(function (response) {
           message.channel.send({
-            embed: {
-              description:
-                ":moneybag: Preço do Bitcoin (em R$)\nR$ " +
-                response.data.BRL.buy,
-              footer: {
-                text: "https://blockchain.info/ticker",
-              },
-            },
+            embeds: [
+              new MessageEmbed()
+                .setDescription(`:moneybag: Preço do Bitcoin (em R$)\nR$ ${response.data.BRL.buy}`)
+                .setFooter({ "text": "https://blockchain.info/ticker" })]
           });
         })
         .catch(function (error) {
@@ -35,14 +31,11 @@ class Utils {
         .get("https://blockchain.info/ticker")
         .then(function (response) {
           message.channel.send({
-            embed: {
-              description:
-                ":moneybag: Preço do Bitcoin (em $)\n$ " +
-                response.data.USD.buy,
-              footer: {
-                text: "https://blockchain.info/ticker",
-              },
-            },
+            embeds: [
+              new MessageEmbed()
+                .setDescription(`:moneybag: Preço do Bitcoin (em $)\n$ ${response.data.USD.buy}`)
+                .setFooter({ "text": "https://blockchain.info/ticker" })
+            ]
           });
         })
         .catch(function (error) {
@@ -57,17 +50,17 @@ class Utils {
   }
 
   help(message) {
-    message.channel.send(
-      new MessageEmbed()
-        .setColor("#0099ff")
-        .setTitle("Comandos")
-        // .setDescription("**[top.gg](https://top.gg/bot/777665289793437759)**")
-        .addFields(
-          {
-            name: "Geral",
-            value: `\`jj avatar\`
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setColor("#0099ff")
+          .setTitle("Comandos")
+          // .setDescription("**[top.gg](https://top.gg/bot/777665289793437759)**")
+          .addFields(
+            {
+              name: "Geral",
+              value: `\`jj avatar\`
 \`jj avatar2braille\`
-\`jj avatar2circle\`
 \`jj avatar2pixel\`
 \`jj disablelevelingchannel\`
 \`jj discord\`
@@ -76,54 +69,53 @@ class Utils {
 \`jj invite\`
 \`jj setlevelingchannel\`
 `,
-            inline: true,
-          },
-          {
-            name: "Entretenimento",
-            value: `\`jj blackjack\`
-\`jj clap\`
+              inline: true,
+            },
+            {
+              name: "Entretenimento",
+              value: `\`jj clap\`
 \`jj cookie\`
 \`jj jokenpo\`
-\`jj rndimg\`
+\`jj risitas\`
 \`jj rndnote\`
 \`jj sadcat\`
-\`jj risitas\`
-\`jj word2ascii\`
 `,
-            inline: true,
-          },
-          {
-            name: "Info",
-            value: `\`jj bitcoinprice\`
+              inline: true,
+            },
+            {
+              name: "Info",
+              value: `\`jj bitcoinprice\`
 \`jj botinfo\`
+\`jj countcommands\`
 \`jj help\`
 \`jj ping\`
 \`jj profile\`
 \`jj profilecard\`
 \`jj serverinfo\`
-\`jj countcommands\`
 `,
-            inline: true,
-          },
-          {
-            name: "Leveling e Economia",
-            value: `\`jj coinsranking\`
+              inline: true,
+            },
+            {
+              name: "Leveling e Economia",
+              value: `\`jj coinsranking\`
+\`jj transfer\`
 \`jj xpranking\`
 `,
-            inline: true,
-          },
-          {
-            name: "Cargos",
-            value: `\`jj createrole [role]\`
+              inline: true,
+            },
+            {
+              name: "Cargos",
+              value: `\`jj createrole [role]\`
 \`jj enterrole [role]\`
+\`jj deleterole [role]\`
 \`jj setinrole [user] [role]\`
 \`jj exitrole [role]\`
-\`jj deleterole [role]\`
 `,
-            inline: true,
-          }
-        )
-    );
+              inline: true,
+            }
+          )
+      ]
+    });
   }
 
   invite(message) {
@@ -133,21 +125,23 @@ class Utils {
   }
 
   ping(client, message) {
-    let ping = new Date().getTime() - message.createdTimestamp;
-    let pingbot = Math.round(client.ws.ping);
+    const ping = Date.now() - message.createdTimestamp;
+    const pingbot = Math.round(client.ws.ping);
 
-    message.channel.send(
-      new MessageEmbed()
-        .setTitle(":ping_pong:Pong!")
-        .addFields(
-          { name: "Ping", value: `${ping}ms`, inline: true },
-          { name: "API Ping", value: `${pingbot}ms`, inline: true }
-        )
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setTitle(":ping_pong:Pong!")
+          .addFields(
+            { name: "Ping", value: `${ping}ms`, inline: true },
+            { name: "API Ping", value: `${pingbot}ms`, inline: true }
+          )]
+    }
     );
   }
 
-  async setlevelingchannel(database, message) {
-    if (message.member.hasPermission("ADMINISTRATOR")) {
+  setlevelingchannel(database, message) {
+    if (message.member.permissions.has("ADMINISTRATOR")) {
       let channel = message.mentions.channels;
       let channel_filter = channel.map(
         (_channel) =>
@@ -172,22 +166,21 @@ class Utils {
     }
   }
 
-  disablelevelingchannel(database, message) {
-    if (message.member.hasPermission("ADMINISTRATOR")) {
-      const guild = doc(database, "Usuarios", message.guild.id)
-      onSnapshot(guild, (doc) => {
-        if ("channel_levelup" in doc.data()) {
-          updateDoc(guild, {
-            channel_levelup: deleteField(),
-          }).then(() => {
-            message.channel.send("Canal de level-up deletado do sistema.");
-          })
-        } else {
-          message.channel.send(
-            "Tem certeza que existe canal de level-up setado nesse servidor?"
-          );
-        }
-      })
+  async disablelevelingchannel(database, message) {
+    if (message.member.permissions.has("ADMINISTRATOR")) {
+      const guild = doc(database, "Usuarios", message.guild.id);
+      const guild_doc = await getDoc(guild);
+      if ("channel_levelup" in guild_doc.data()) {
+        updateDoc(guild, {
+          channel_levelup: deleteField(),
+        }).then(() => {
+          message.channel.send("Canal de level-up deletado do sistema.");
+        })
+      } else {
+        message.channel.send(
+          "Tem certeza que existe canal de level-up setado nesse servidor?"
+        );
+      }
     } else {
       message.channel.send("Somente administradores podem usar esse comando.");
     }

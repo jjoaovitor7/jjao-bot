@@ -4,11 +4,11 @@ const { doc, getDoc, updateDoc } = require("firebase/firestore");
 
 // async function addBonus(database, message, type) {
 //   let qtde = Math.floor(Math.random() * 50) + 1;
-//   message.channel.send(
+//   message.channel.send({embeds: [
 //     new MessageEmbed()
 //       .setColor("#0099ff")
 //       .addField(`Moedas do ${type}`, qtde + " moedas.")
-//   );
+//   ]});
 
 //   const guild = doc(database, "Usuarios", message.guild.id);
 //   const user = doc(guild, "Usuarios", message.author.id);
