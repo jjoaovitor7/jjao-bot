@@ -1,41 +1,26 @@
-// .env
 require("dotenv").config();
 
-// discord
 const { Client, Intents } = require("discord.js");
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS],
   disableEveryone: true,
 });
 
-// modules
 const ShowController = require("./modules/ShowController.js");
-
 let inCooldown = new Set();
 
-// firebase
-const firebase = require("firebase/app");
-require("firebase/firestore");
-const config = {
+const Leveling = require("discord-leveling-firebase");
+const leveling = new Leveling(client, {
   apiKey: process.env.APIKEY,
   authDomain: process.env.AUTHDOMAIN,
   projectId: process.env.PROJECTID,
   storageBucket: process.env.STORAGEBUCKET,
   messagingSenderId: process.env.MESSAGINGSENDERID,
   appId: process.env.APPID,
-};
-const app = firebase.initializeApp(config);
-const database = firebase.firestore(app);
+});
 
-// Leveling
-const Leveling = require("discord-leveling-firebase");
-let leveling = new Leveling(client, database);
-
-// Discord
 client.on("ready", () => {
   console.log(`Conectado como: ${client.user.tag}.`);
-
-  // showActivity
   ShowController.showActivity(client);
 });
 
@@ -44,12 +29,12 @@ let countCommands = {
   avatar2braille: 0,
   avatar2circle: 0,
   avatar2pixel: 0,
-  deletelevelupchannel: 0,
+  disablelevelingchannel: 0,
   discord: 0,
   donate: 0,
   github: 0,
   invite: 0,
-  setlevelupchannel: 0,
+  setlevelingchannel: 0,
 
   // LEVELING E ECONOMIA
   coinsranking: 0,
@@ -99,16 +84,6 @@ client.on("message", async (message) => {
     return;
   }
 
-  // se digitar "Vingadores"
-  if (message.content == "Vingadores") {
-    message.channel.send({
-      embed: {
-        color: "0099ff",
-        description: "Avante!",
-      },
-    });
-  }
-
   if (message.guild != null) {
     if (
       inCooldown.has(message.guild.id.concat(message.author.id)) &&
@@ -127,7 +102,7 @@ client.on("message", async (message) => {
 
   if (message.content.startsWith(process.env.PREFIX)) {
     let command = require("./commands/command.js");
-    command(client, message, database, countCommands);
+    command(client, message, countCommands);
   }
 });
 

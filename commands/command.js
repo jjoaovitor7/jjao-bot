@@ -1,7 +1,19 @@
-module.exports = function command(client, message, database, countCommands) {
-    let commandAux = message.content.substr(3).split(" ");
-    let command = commandAux[0];
-    let args = commandAux.slice(1);
+const { initializeApp } = require("firebase/app");
+const { getFirestore } = require("firebase/firestore");
+app = initializeApp({
+    apiKey: process.env.APIKEY,
+    authDomain: process.env.AUTHDOMAIN,
+    projectId: process.env.PROJECTID,
+    storageBucket: process.env.STORAGEBUCKET,
+    messagingSenderId: process.env.MESSAGINGSENDERID,
+    appId: process.env.APPID,
+});
+db = getFirestore(app);
+
+module.exports = function command(client, message, countCommands) {
+    let command_filter = message.content.substr(3).split(" ");
+    let command = command_filter[0];
+    let args = command_filter.slice(1);
 
     let Balance = require("./Classes/Balance.js");
     let Fun = require("./Classes/Fun.js");
@@ -17,27 +29,27 @@ module.exports = function command(client, message, database, countCommands) {
         avatar2braille: () => Fun.avatar2braille(message),
         avatar2circle: () => Fun.avatar2circle(message),
         avatar2pixel: () => Fun.avatar2pixel(message),
-        deletelevelupchannel: () => Utils.deleteLevelUpChannel(database, message),
+        disablelevelingchannel: () => Utils.disablelevelingchannel(db, message),
         discord: () => Utils.discord(message),
         donate: () => Utils.kofi(message),
         github: () => Utils.github(message),
         invite: () => Utils.invite(message),
-        setlevelupchannel: () => Utils.setLevelUpChannel(database, message, args),
+        setlevelingchannel: () => Utils.setlevelingchannel(db, message, args),
 
         // LEVELING E ECONOMIA
-        coinsranking: () => Ranking.moneyranking(database, message),
-        daily: () => Balance.daily(database, message),
-        monthly: () => Balance.monthly(database, message),
-        xpranking: () => Ranking.xpranking(database, message),
-        weekly: () => Balance.weekly(database, message),
-        transfer: () => Balance.transfer(database, message, args),
+        coinsranking: () => Ranking.moneyranking(db, message),
+        daily: () => Balance.daily(db, message),
+        monthly: () => Balance.monthly(db, message),
+        xpranking: () => Ranking.xpranking(db, message),
+        weekly: () => Balance.weekly(db, message),
+        transfer: () => Balance.transfer(db, message, args),
 
         // ENTRETENIMENTO
-        blackjack: () => Fun._blackjack(message, client, database),
+        blackjack: () => Fun._blackjack(message, client, db),
         clap: () => Fun.clap(message),
         connect4: () => Fun.connect4(message),
         cookie: () => Fun.cookie(message),
-        jokenpo: () => Fun.jokenpo(database, client, message, args),
+        jokenpo: () => Fun.jokenpo(db, client, message, args),
         rndnote: () => Fun.rndnote(message),
         sadcat: () => Fun.sadcat(message),
         snake: () => Fun.snake(message),
@@ -49,8 +61,8 @@ module.exports = function command(client, message, database, countCommands) {
         botinfo: () => Info.botinfo(client, message),
         help: () => Utils.help(message),
         ping: () => Utils.ping(client, message),
-        profile: () => Profile.profile(database, message, args),
-        profilecard: () => Profile.profilecard(database, message),
+        profile: () => Profile.profile(db, message, args),
+        profilecard: () => Profile.profilecard(db, message),
         serverinfo: () => Info.serverinfo(message),
         userinfo: () => Info.userinfo(message),
         countcommands: () => Info.countCommands(message, countCommands),

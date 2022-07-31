@@ -6,10 +6,10 @@ class Role {
       if (message.member.hasPermission("ADMINISTRATOR")) {
         if (message.member.guild.me.hasPermission("MANAGE_ROLES")) {
           let cargoName = args[0];
-          let cargoAux = message.guild.roles.cache.find(
+          let _cargo = message.guild.roles.cache.find(
             (x) => x.name === cargoName
           );
-          if (typeof cargoAux == "undefined") {
+          if (typeof _cargo == "undefined") {
             // criar role
             message.member.guild.roles.create({
               data: {

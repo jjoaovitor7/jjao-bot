@@ -1,4 +1,5 @@
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
+const { doc, onSnapshot, updateDoc, deleteField, getDoc } = require("firebase/firestore");
 
 class Utils {
   bitcoinprice(message, args) {
@@ -26,7 +27,7 @@ class Utils {
         .catch(function (error) {
           console.log(error);
         })
-        .then(function () {});
+        .then(function () { });
     } else if (args[0] == "USD") {
       const axios = require("axios");
 
@@ -47,7 +48,7 @@ class Utils {
         .catch(function (error) {
           console.log(error);
         })
-        .then(function () {});
+        .then(function () { });
     } else {
       message.channel.send(
         "Só estão disponíveis as opções BRL e USD. \n`jj bitcoinprice BRL` ou `jj bitcoinprice USD`."
@@ -57,7 +58,7 @@ class Utils {
 
   help(message) {
     message.channel.send(
-      new Discord.MessageEmbed()
+      new MessageEmbed()
         .setColor("#0099ff")
         .setTitle("Comandos")
         // .setDescription("**[top.gg](https://top.gg/bot/777665289793437759)**")
@@ -68,12 +69,12 @@ class Utils {
 \`jj avatar2braille\`
 \`jj avatar2circle\`
 \`jj avatar2pixel\`
-\`jj deletelevelupchannel\`
+\`jj disablelevelingchannel\`
 \`jj discord\`
 \`jj donate\`
 \`jj github\`
 \`jj invite\`
-\`jj setlevelupchannel\`
+\`jj setlevelingchannel\`
 `,
             inline: true,
           },
@@ -107,7 +108,6 @@ class Utils {
           {
             name: "Leveling e Economia",
             value: `\`jj coinsranking\`
-\`jj daily | weekly | monthly \`
 \`jj xpranking\`
 `,
             inline: true,
@@ -137,7 +137,7 @@ class Utils {
     let pingbot = Math.round(client.ws.ping);
 
     message.channel.send(
-      new Discord.MessageEmbed()
+      new MessageEmbed()
         .setTitle(":ping_pong:Pong!")
         .addFields(
           { name: "Ping", value: `${ping}ms`, inline: true },
@@ -146,39 +146,24 @@ class Utils {
     );
   }
 
-  setLevelUpChannel(database, message) {
+  async setlevelingchannel(database, message) {
     if (message.member.hasPermission("ADMINISTRATOR")) {
       let channel = message.mentions.channels;
-
-      let channelAux = channel.map(
-        (channel_aux) =>
+      let channel_filter = channel.map(
+        (_channel) =>
           new Object({
-            id: channel_aux.id,
-          })
-      );
+            id: _channel.id,
+          }));
 
-      if (channelAux.length == 1) {
-        let docReferenceAux = database
-          .collection("LevelUpChannel")
-          .doc(message.guild.id);
-
-        docReferenceAux.get().then((docSnapshot) => {
-          if (docSnapshot.exists) {
-            message.channel.send(
-              "Já existe um canal de level-up setado nesse servidor!"
-            );
-          } else {
-            docReferenceAux.set({ name: message.guild.name });
-
-            docReferenceAux
-              .collection("Channel")
-              .doc(channelAux[0].id)
-              .set({ channelexists: true });
-            message.channel.send(
-              `Canal <#${channelAux[0].id}> setado como canal de level-up!`
-            );
-          }
-        });
+      if (channel_filter.length == 1) {
+        const guild = doc(database, "Usuarios", message.guild.id)
+        updateDoc(guild, {
+          channel_levelup: channel_filter[0].id
+        }).then(() => {
+          message.channel.send(
+            `Canal <#${channel_filter[0].id}> setado como canal de level-up!`
+          );
+        })
       } else {
         message.channel.send("Você precisa marcar o canal.");
       }
@@ -187,30 +172,22 @@ class Utils {
     }
   }
 
-  deleteLevelUpChannel(database, message) {
+  disablelevelingchannel(database, message) {
     if (message.member.hasPermission("ADMINISTRATOR")) {
-      database
-        .collection("LevelUpChannel")
-        .doc(message.guild.id)
-        .collection("Channel")
-        .orderBy("channelexists")
-        .limit(1)
-        .get()
-        .then((querySnapshot) => {
-          if (!querySnapshot.empty) {
-            const queryDocumentSnapshot = querySnapshot.docs[0];
-            queryDocumentSnapshot.ref.delete();
-            database
-              .collection("LevelUpChannel")
-              .doc(message.guild.id)
-              .delete();
+      const guild = doc(database, "Usuarios", message.guild.id)
+      onSnapshot(guild, (doc) => {
+        if ("channel_levelup" in doc.data()) {
+          updateDoc(guild, {
+            channel_levelup: deleteField(),
+          }).then(() => {
             message.channel.send("Canal de level-up deletado do sistema.");
-          } else {
-            message.channel.send(
-              "Tem certeza que existe canal de level-up setado nesse servidor?"
-            );
-          }
-        });
+          })
+        } else {
+          message.channel.send(
+            "Tem certeza que existe canal de level-up setado nesse servidor?"
+          );
+        }
+      })
     } else {
       message.channel.send("Somente administradores podem usar esse comando.");
     }
