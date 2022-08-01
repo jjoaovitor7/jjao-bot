@@ -1,13 +1,7 @@
 const { initializeApp } = require("firebase/app");
 const { getFirestore } = require("firebase/firestore");
-app = initializeApp({
-    apiKey: process.env.APIKEY,
-    authDomain: process.env.AUTHDOMAIN,
-    projectId: process.env.PROJECTID,
-    storageBucket: process.env.STORAGEBUCKET,
-    messagingSenderId: process.env.MESSAGINGSENDERID,
-    appId: process.env.APPID,
-});
+const config = require("../config.js");
+app = initializeApp(config.firebase_config);
 db = getFirestore(app);
 
 module.exports = function command(client, message, countCommands) {
@@ -75,6 +69,10 @@ module.exports = function command(client, message, countCommands) {
         setinrole: () => Role.setin(message, args), // somente administradores
     };
 
-    commands[command]();
-    countCommands[command] = parseInt(countCommands[command]) + 1;
+    if (command in commands) {
+        commands[command]();
+        countCommands[command] = parseInt(countCommands[command]) + 1;
+    } else {
+        message.channel.send({ content: "\`jj help\` para ver os comandos disponíveis." });
+    }
 };

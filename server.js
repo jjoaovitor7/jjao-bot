@@ -1,27 +1,13 @@
-require("dotenv").config({path: ".env"});
+const config = require("./config.js");
 
 const { Client, Intents } = require("discord.js");
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
 });
 
-const ShowController = require("./modules/ShowController.js");
 let inCooldown = new Set();
-
 const Leveling = require("discord-leveling-firebase");
-const leveling = new Leveling(client, {
-  apiKey: process.env.APIKEY,
-  authDomain: process.env.AUTHDOMAIN,
-  projectId: process.env.PROJECTID,
-  storageBucket: process.env.STORAGEBUCKET,
-  messagingSenderId: process.env.MESSAGINGSENDERID,
-  appId: process.env.APPID,
-});
-
-client.on("ready", () => {
-  console.log(`Conectado como: ${client.user.tag}.`);
-  ShowController.showActivity(client);
-});
+const leveling = new Leveling(client, config.firebase_config);
 
 let countCommands = {
   avatar: 0,
@@ -72,21 +58,34 @@ let countCommands = {
   setinrole: 0,
 };
 
-client.on("messageCreate", async (message) => {
-  // se a mensagem for do próprio bot, ignore-a
-  if (message.author.id == client.user.id) {
-    return;
+function showActivity(client) {
+  if (client.guilds.cache.size == 0 || client.guilds.cache.size == 1) {
+    client.user.setActivity(
+      "jj help | " + client.guilds.cache.size + " servidor"
+    );
+  } else {
+    client.user.setActivity(
+      "jj help | " + client.guilds.cache.size + " servidores"
+    );
   }
+  // client.user.setActivity("Em manutenção.");
+  // client.user.setStatus("idle"); // dnd, idle, online, invisible
+}
 
-  // se a mensagem for de um outro bot, ignore-a
-  if (message.author.bot == true) {
+client.on("ready", () => {
+  console.log(`Conectado como: ${client.user.tag}.`);
+  showActivity(client);
+});
+
+client.on("messageCreate", async (message) => {
+  if (message.author.id == client.user.id || message.author.id == true) {
     return;
   }
 
   if (message.guild != null) {
     if (
       inCooldown.has(message.guild.id.concat(message.author.id)) &&
-      !message.content.startsWith(process.env.PREFIX)
+      !message.content.startsWith(config.prefix)
     ) {
       return;
     } else {
@@ -99,10 +98,10 @@ client.on("messageCreate", async (message) => {
     }
   }
 
-  if (message.content.startsWith(process.env.PREFIX)) {
+  if (message.content.startsWith(config.prefix)) {
     let command = require("./commands/command.js");
     command(client, message, countCommands);
   }
 });
 
-client.login(process.env.TOKEN);
+client.login(config.token);
