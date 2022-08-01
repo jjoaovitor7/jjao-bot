@@ -61,19 +61,23 @@ class Utils {
               name: "Geral",
               value: `\`jj avatar\`
 \`jj avatar2braille\`
-\`jj avatar2pixel\`
-\`jj disablelevelingchannel\`
+\`jj bitcoinprice\`
+\`jj botinfo\`
+\`jj countcommands\`
 \`jj discord\`
 \`jj donate\`
 \`jj github\`
+\`jj help\`
 \`jj invite\`
-\`jj setlevelingchannel\`
+\`jj ping\`
+\`jj serverinfo\`
 `,
               inline: true,
             },
             {
               name: "Entretenimento",
-              value: `\`jj clap\`
+              value: `\`jj avatar2pixel\`
+\`jj clap\`
 \`jj cookie\`
 \`jj jokenpo\`
 \`jj risitas\`
@@ -83,21 +87,12 @@ class Utils {
               inline: true,
             },
             {
-              name: "Info",
-              value: `\`jj bitcoinprice\`
-\`jj botinfo\`
-\`jj countcommands\`
-\`jj help\`
-\`jj ping\`
-\`jj profile\`
-\`jj profilecard\`
-\`jj serverinfo\`
-`,
-              inline: true,
-            },
-            {
               name: "Leveling e Economia",
               value: `\`jj coinsranking\`
+\`jj disablelevelingchannel\`
+\`jj profile\`
+\`jj profilecard\`
+\`jj setlevelingchannel\`
 \`jj transfer\`
 \`jj xpranking\`
 `,

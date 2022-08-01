@@ -1,5 +1,7 @@
 const { MessageEmbed, MessageAttachment } = require("discord.js");
 const { doc, getDoc } = require("firebase/firestore");
+const moment = require("moment");
+require("moment-duration-format");
 
 class Profile {
   avatar(message) {
@@ -45,10 +47,12 @@ class Profile {
             .addFields(
               { name: "Level", value: String(profile.level), inline: true },
               { name: "Xp", value: String(`${profile.xp}/${(profile.level + 1) * 100}`), inline: true },
-              { name: "Saldo", value: String(profile.money) + " moedas" }
+              { name: "Saldo", value: String(profile.money) + " moedas" },
+              // { name: "Criado em", value: moment.utc(message.author.createdAt).format("LL"), inline: true }
             )
             .setThumbnail(`https://cdn.discordapp.com/avatars/${userinfo.id}/${userinfo.avatar}.png?size=1024`
             )
+            .setFooter({ "text": `ID: ${message.author.id}` })
         ]
       });
     }
@@ -75,13 +79,7 @@ class Profile {
     let money = data.money;
 
     const rankCard = new canvacord.Rank()
-      .setAvatar(
-        "https://cdn.discordapp.com/avatars/" +
-        message.author.id +
-        "/" +
-        message.author.avatar +
-        ".png?size=1024"
-      )
+      .setAvatar(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=1024`)
       .setCurrentXP(xp)
       .setRequiredXP((level + 1) * 100)
       .setLevel(level)
