@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
+const QuickChart = require("quickchart-js");
 const moment = require("moment");
 require("moment-duration-format");
-const QuickChart = require("quickchart-js");
 
 class Info {
   botinfo(client, message) {
@@ -59,23 +59,6 @@ class Info {
     });
   }
 
-  // userinfo(message) {
-  //   message.channel.send({embeds: [
-  //     new MessageEmbed()
-  //       .setTimestamp()
-  //       .setTitle(`${message.author.username}#${message.author.discriminator}`)
-  //       .setThumbnail(
-  //         "https://cdn.discordapp.com/icons/" +
-  //           message.author.id +
-  //           "/" +
-  //           message.author.avatar +
-  //           ".png?size=1024"
-  //       )
-  //       .addFields({name: "Criado em", value: moment.utc(message.author.createdAt).format("LL")})
-  //       .setFooter({"text": `ID: ${message.author.id}`})
-  //   ]});
-  // }
-
   countCommands(message, countCommands) {
     let data_command = [];
     let data_value = [];
@@ -119,8 +102,8 @@ class Info {
     message.channel.send({
       embeds: [
         new MessageEmbed().setTitle("Quantidade de Uso de Comandos")
-        .setDescription("obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.")
-        .setImage(chart.getUrl())
+          .setDescription("obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.")
+          .setImage(chart.getUrl())
       ]
     });
   }

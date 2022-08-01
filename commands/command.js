@@ -22,23 +22,31 @@ module.exports = function command(client, message, countCommands) {
         avatar: () => Profile.avatar(message),
         avatar2braille: () => Fun.avatar2braille(message),
         // avatar2circle: () => Fun.avatar2circle(message),
-        avatar2pixel: () => Fun.avatar2pixel(message),
-        disablelevelingchannel: () => Utils.disablelevelingchannel(db, message),
+        bitcoinprice: () => Utils.bitcoinprice(message, args),
+        botinfo: () => Info.botinfo(client, message),
+        countcommands: () => Info.countCommands(message, countCommands),
         discord: () => Utils.discord(message),
         donate: () => Utils.kofi(message),
         github: () => Utils.github(message),
+        help: () => Utils.help(message),
         invite: () => Utils.invite(message),
-        setlevelingchannel: () => Utils.setlevelingchannel(db, message, args),
+        ping: () => Utils.ping(client, message),
+        serverinfo: () => Info.serverinfo(message),
 
         // LEVELING E ECONOMIA
         coinsranking: () => Ranking.moneyranking(db, message),
-        daily: () => Balance.daily(db, message),
-        monthly: () => Balance.monthly(db, message),
+        // daily: () => Balance.daily(db, message),
+        disablelevelingchannel: () => Utils.disablelevelingchannel(db, message),
+        // monthly: () => Balance.monthly(db, message),
+        profile: () => Profile.profile(db, message, args),
+        profilecard: () => Profile.profilecard(db, message),
+        setlevelingchannel: () => Utils.setlevelingchannel(db, message, args),
         xpranking: () => Ranking.xpranking(db, message),
-        weekly: () => Balance.weekly(db, message),
+        // weekly: () => Balance.weekly(db, message),
         transfer: () => Balance.transfer(db, message, args),
 
         // ENTRETENIMENTO
+        avatar2pixel: () => Fun.avatar2pixel(message),
         blackjack: () => Fun._blackjack(message, client, db),
         clap: () => Fun.clap(message),
         connect4: () => Fun.connect4(message),
@@ -49,17 +57,6 @@ module.exports = function command(client, message, countCommands) {
         snake: () => Fun.snake(message),
         risitas: () => Fun.risitas(message),
         // word2ascii: () => Fun.word2ascii(message, args),
-
-        // INFO
-        bitcoinprice: () => Utils.bitcoinprice(message, args),
-        botinfo: () => Info.botinfo(client, message),
-        help: () => Utils.help(message),
-        ping: () => Utils.ping(client, message),
-        profile: () => Profile.profile(db, message, args),
-        profilecard: () => Profile.profilecard(db, message),
-        serverinfo: () => Info.serverinfo(message),
-        userinfo: () => Info.userinfo(message),
-        countcommands: () => Info.countCommands(message, countCommands),
 
         // CARGOS
         createrole: () => Role.create(message, args), // somente administradores
