@@ -1,4 +1,4 @@
-// const { MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 // const ms = require("parse-ms");
 const { collection, doc, limit, orderBy, query, getDoc, getDocs, updateDoc } = require("firebase/firestore");
 
