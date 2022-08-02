@@ -34,19 +34,19 @@ module.exports = function command(client, message, countCommands, Leveling) {
 
         // LEVELING E ECONOMIA
         coinsranking: () => Balance.moneyranking(db, message),
-        // daily: () => Balance.daily(db, message),
+        daily: () => Balance.daily(db, message),
         disablelevelingchannel: () => Leveling.disablelevelingchannel(message),
-        // monthly: () => Balance.monthly(db, message),
+        monthly: () => Balance.monthly(db, message),
         profile: () => Profile.profile(db, message, args),
         profilecard: () => Profile.profilecard(db, message),
         setlevelingchannel: () => Leveling.setlevelingchannel(message, args),
         xpranking: () => Utils.xpranking(message, Leveling),
-        // weekly: () => Balance.weekly(db, message),
+        weekly: () => Balance.weekly(db, message),
         transfer: () => Balance.transfer(db, message, args),
 
         // ENTRETENIMENTO
         avatar2pixel: () => Fun.avatar2pixel(message),
-        blackjack: () => Fun._blackjack(message, client, db),
+        blackjack: () => Fun.blackjack(message),
         clap: () => Fun.clap(message),
         connect4: () => Fun.connect4(message),
         cookie: () => Fun.cookie(message),
@@ -55,7 +55,7 @@ module.exports = function command(client, message, countCommands, Leveling) {
         sadcat: () => Fun.sadcat(message),
         snake: () => Fun.snake(message),
         risitas: () => Fun.risitas(message),
-        // word2ascii: () => Fun.word2ascii(message, args),
+        word2ascii: () => Fun.word2ascii(message, args),
 
         // CARGOS
         createrole: () => Role.create(message, args), // somente administradores
