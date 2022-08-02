@@ -4,7 +4,7 @@ const config = require("../config.js");
 app = initializeApp(config.firebase_config);
 db = getFirestore(app);
 
-module.exports = function command(client, message, countCommands) {
+module.exports = function command(client, message, countCommands, Leveling) {
     let command_filter = message.content.substr(3).split(" ");
     let command = command_filter[0];
     let args = command_filter.slice(1);
@@ -13,7 +13,6 @@ module.exports = function command(client, message, countCommands) {
     let Fun = require("./Classes/Fun.js");
     let Info = require("./Classes/Info.js");
     let Profile = require("./Classes/Profile.js");
-    let Ranking = require("./Classes/Ranking.js");
     let Role = require("./Classes/Role.js");
     let Utils = require("./Classes/Utils.js");
 
@@ -34,14 +33,14 @@ module.exports = function command(client, message, countCommands) {
         serverinfo: () => Info.serverinfo(message),
 
         // LEVELING E ECONOMIA
-        coinsranking: () => Ranking.moneyranking(db, message),
+        coinsranking: () => Balance.moneyranking(db, message),
         // daily: () => Balance.daily(db, message),
-        disablelevelingchannel: () => Utils.disablelevelingchannel(db, message),
+        disablelevelingchannel: () => Leveling.disablelevelingchannel(message),
         // monthly: () => Balance.monthly(db, message),
         profile: () => Profile.profile(db, message, args),
         profilecard: () => Profile.profilecard(db, message),
-        setlevelingchannel: () => Utils.setlevelingchannel(db, message, args),
-        xpranking: () => Ranking.xpranking(db, message),
+        setlevelingchannel: () => Leveling.setlevelingchannel(message, args),
+        xpranking: () => Utils.xpranking(message, Leveling),
         // weekly: () => Balance.weekly(db, message),
         transfer: () => Balance.transfer(db, message, args),
 

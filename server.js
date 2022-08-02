@@ -97,7 +97,7 @@ client.on("messageCreate", async (message) => {
 
   if (message.content.startsWith(config.prefix)) {
     let command = require("./commands/command.js");
-    command(client, message, countCommands);
+    command(client, message, countCommands, leveling);
   }
 });
 

@@ -1,6 +1,6 @@
 // const { MessageEmbed } = require("discord.js");
 // const ms = require("parse-ms");
-const { doc, getDoc, updateDoc } = require("firebase/firestore");
+const { collection, doc, limit, orderBy, query, getDoc, getDocs, updateDoc } = require("firebase/firestore");
 
 // async function addBonus(database, message, type) {
 //   let qtde = Math.floor(Math.random() * 50) + 1;
@@ -78,6 +78,26 @@ class Balance {
   //     addBonus(database, message, "Mês");
   //   }
   // }
+
+  async moneyranking(database, message) {
+    const guild = collection(database, "Usuarios", message.guild.id, "Usuarios");
+    const docs_filter = query(guild, limit(5), orderBy("money", "desc"));
+    const docs = await getDocs(docs_filter);
+    let arr = [];
+
+    for (let i = 0; i < docs.size; i++) {
+      arr.push(`${i + 1}: ${docs.docs[i].data().name} (moedas: ${docs.docs[i].data().money})\n`);
+    }
+
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+        .setColor("ffd700")
+        .setTitle("Ranking de Moedas (do servidor)")
+        .setDescription(arr.join(" ").toString())
+      ]
+    });
+  }
 
   async transfer(database, message, args) {
     let toTransfer = message.mentions.users.first();
