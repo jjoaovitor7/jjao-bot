@@ -77,18 +77,21 @@ class Utils {
             {
               name: "Entretenimento",
               value: `\`jj avatar2pixel\`
+\`jj blackjack\`
 \`jj clap\`
 \`jj cookie\`
 \`jj jokenpo\`
 \`jj risitas\`
 \`jj rndnote\`
 \`jj sadcat\`
+\`jj word2ascii\`
 `,
               inline: true,
             },
             {
               name: "Leveling e Economia",
               value: `\`jj coinsranking\`
+\`jj [daily | weekly | monthly]\`
 \`jj disablelevelingchannel\`
 \`jj profile\`
 \`jj profilecard\`

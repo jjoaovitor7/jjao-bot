@@ -7,18 +7,19 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "ascii-art": "^2.8.5",
     "axios": "^0.27.2",
     "canvacord": "^5.0.8",
+    "discord-blackjack": "^4.0.0",
     "discord-jokenpo": "^1.2.11",
-    "discord-leveling-firebase": "^0.9.0",
+    "discord-leveling-firebase": "^0.9.1",
     "discord.js": "^13.9.2",
     "dotenv": "^16.0.1",
     "firebase": "^9.6.10",
     "img2braille": "^1.0.1",
-    "midi-writer-js": "^1.7.4",
+    "midi-writer-js": "^2.1.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "parse-ms": "^2.1.0",
     "quickchart-js": "^3.0.2"
   },
   "repository": {
@@ -26,14 +27,13 @@
     "url": "git+https://jjoaovitor7@github.com/jjoaovitor7/jjao-bot.git"
   },
   "keywords": [
-    "node",
     "jjao",
+    "discordjs",
     "discord-bot",
     "js",
-    "javascript",
-    "discord-js"
+    "javascript"
   ],
-  "author": "",
+  "author": "João Vítor",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jjoaovitor7/jjao-bot/issues"

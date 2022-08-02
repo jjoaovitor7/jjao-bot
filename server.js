@@ -14,6 +14,7 @@ let countCommands = {
   avatar2braille: 0,
   // avatar2circle: 0,
   bitcoinprice: 0,
+  blackjack: 0,
   botinfo: 0,
   countcommands: 0,
   discord: 0,
@@ -26,14 +27,14 @@ let countCommands = {
 
   // LEVELING E ECONOMIA
   coinsranking: 0,
-  // daily: 0,
+  daily: 0,
   disablelevelingchannel: 0,
-  // monthly: 0,
+  monthly: 0,
   profile: 0,
   profilecard: 0,
   setlevelingchannel: 0,
   xpranking: 0,
-  // weekly: 0,
+  weekly: 0,
 
   // ENTRETENIMENTO
   avatar2pixel: 0,
@@ -45,7 +46,7 @@ let countCommands = {
   sadcat: 0,
   snake: 0,
   risitas: 0,
-  // word2ascii: 0,
+  word2ascii: 0,
 
   // CARGOS
   createrole: 0,

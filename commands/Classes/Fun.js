@@ -1,5 +1,7 @@
 const { MessageAttachment, MessageEmbed } = require("discord.js");
 const { doc, updateDoc, getDoc } = require("firebase/firestore");
+const asciiart = require("ascii-art");
+const discord_blackjack = require("discord-blackjack");
 
 class Fun {
   async avatar2braille(message) {
@@ -30,7 +32,7 @@ class Fun {
         5
       ).then(function (img) {
         const attachment = new MessageAttachment(img, "pixel.png");
-        message.channel.send({files: [attachment]});
+        message.channel.send({ files: [attachment] });
       });
     } else {
       const canvacord = require("canvacord");
@@ -41,7 +43,7 @@ class Fun {
         5
       ).then(function (img) {
         const attachment = new MessageAttachment(img, "pixel.png");
-        message.channel.send({files: [attachment]});
+        message.channel.send({ files: [attachment] });
       });
     }
   }
@@ -70,6 +72,19 @@ class Fun {
   //     });
   //   }
   // }
+
+  async blackjack(message) {
+    let game = await discord_blackjack(message, { resultEmbed: false });
+
+    switch (game.result) {
+      case "WIN":
+        message.channel.send("Você ganhou.");
+        break;
+      case "LOSE":
+        message.channel.send("Você perdeu.");
+        break;
+    }
+  }
 
   clap(message) {
     message.channel.send({
@@ -176,7 +191,7 @@ class Fun {
     let track = new MidiWriter.Track();
     track.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
 
-    let notes = [
+    const notes = [
       "A3",
       "A4",
       "Ab4",
@@ -212,27 +227,22 @@ class Fun {
     );
 
     let writer = new MidiWriter.Writer(track);
-    writer.saveMIDI("note");
+    let buffer = Buffer.from(writer.buildFile());
     message.channel.send({
-      files: ["note.mid"],
+      files: [new MessageAttachment(buffer, "note.mid")],
     });
   }
 
-  // word2ascii(message, args) {
-  //   if (args != null && args != "" && args != " ") {
-  //     const axios = require("axios");
-
-  //     axios
-  //       .get(`https://artii.herokuapp.com/make?text=${args[0]}`)
-  //       .then(function (response) {
-  //         message.channel.send(`\`\`\`${response.data}\`\`\``);
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //       })
-  //       .then(function () { });
-  //   }
-  // }
+  word2ascii(message, args) {
+    if (args != null && args != "" && args != " ") {
+      asciiart.font(args[0], "doom")
+        .then((rendered) => {
+          message.channel.send(`\`\`\`${rendered}\`\`\``);
+        }).catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 }
 
 module.exports = new Fun();
