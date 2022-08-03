@@ -2,7 +2,7 @@ const config = require("./config.js");
 
 const { Client, Intents } = require("discord.js");
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 });
 
 let inCooldown = new Set();
@@ -39,7 +39,6 @@ let countCommands = {
   // ENTRETENIMENTO
   avatar2pixel: 0,
   clap: 0,
-  connect4: 0,
   cookie: 0,
   jokenpo: 0,
   rndnote: 0,

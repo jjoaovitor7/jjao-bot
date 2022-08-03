@@ -1,7 +1,14 @@
 const { MessageAttachment, MessageEmbed } = require("discord.js");
 const { doc, updateDoc, getDoc } = require("firebase/firestore");
-const asciiart = require("ascii-art");
+const Font = require("ascii-art-font");
 const discord_blackjack = require("discord-blackjack");
+const SnakeGame = require("snakecord");
+const snakeGame = new SnakeGame({
+  title: "Snake",
+  color: "GREEN",
+  timestamp: true,
+  gameOverTitle: "Game Over"
+});
 
 class Fun {
   async avatar2braille(message) {
@@ -185,6 +192,10 @@ class Fun {
     message.channel.send("https://tenor.com/view/austin-sad-cat-gif-18483293");
   }
 
+  async snake(message) {
+    await snakeGame.newGame(message);
+  }
+
   rndnote(message) {
     let MidiWriter = require("midi-writer-js");
 
@@ -235,12 +246,9 @@ class Fun {
 
   word2ascii(message, args) {
     if (args != null && args != "" && args != " ") {
-      asciiart.font(args[0], "doom")
-        .then((rendered) => {
-          message.channel.send(`\`\`\`${rendered}\`\`\``);
-        }).catch((err) => {
-          console.log(err);
-        });
+      Font.create(args[0], "Doom", function(err, rendered) {
+        message.channel.send(`\`\`\`${rendered}\`\`\``);
+      })
     }
   }
 }

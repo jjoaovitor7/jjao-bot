@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "ascii-art": "^2.8.5",
+    "ascii-art-font": "^1.0.2",
     "axios": "^0.27.2",
     "canvacord": "^5.0.8",
     "discord-blackjack": "^4.0.0",
@@ -20,7 +20,8 @@
     "midi-writer-js": "^2.1.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "quickchart-js": "^3.0.2"
+    "quickchart-js": "^3.0.2",
+    "snakecord": "^1.0.9"
   },
   "repository": {
     "type": "git",

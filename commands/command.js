@@ -48,7 +48,6 @@ module.exports = function command(client, message, countCommands, Leveling) {
         avatar2pixel: () => Fun.avatar2pixel(message),
         blackjack: () => Fun.blackjack(message),
         clap: () => Fun.clap(message),
-        connect4: () => Fun.connect4(message),
         cookie: () => Fun.cookie(message),
         jokenpo: () => Fun.jokenpo(db, client, message, args),
         rndnote: () => Fun.rndnote(message),
