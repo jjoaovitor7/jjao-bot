@@ -84,6 +84,7 @@ class Utils {
 \`jj risitas\`
 \`jj rndnote\`
 \`jj sadcat\`
+\`jj snake\`
 \`jj word2ascii\`
 `,
               inline: true,
