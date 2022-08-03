@@ -57,11 +57,11 @@ module.exports = function command(client, message, countCommands, Leveling) {
         word2ascii: () => Fun.word2ascii(message, args),
 
         // CARGOS
-        createrole: () => Role.create(message, args), // somente administradores
+        createrole: () => Role.create(message, args),
         enterrole: () => Role.enter(message, args),
-        deleterole: () => Role.delete(message, args), // somente administradores
+        deleterole: () => Role.delete(message, args),
         exitrole: () => Role.exit(message, args),
-        setinrole: () => Role.setin(message, args), // somente administradores
+        setinrole: () => Role.setin(message, args),
     };
 
     if (command in commands) {

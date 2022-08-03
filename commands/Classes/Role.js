@@ -3,8 +3,8 @@ class Role {
     if (message.channel.type == "dm") {
       message.reply("Esse comando só pode ser usado em servidor.");
     } else {
-      if (message.member.hasPermission("ADMINISTRATOR")) {
-        if (message.member.guild.me.hasPermission("MANAGE_ROLES")) {
+      if (message.member.permissions.has("ADMINISTRATOR")) {
+        if (message.member.guild.me.permissions.has("MANAGE_ROLES")) {
           let cargoName = args[0];
           let _cargo = message.guild.roles.cache.find(
             (x) => x.name === cargoName
@@ -49,8 +49,8 @@ class Role {
     if (message.channel.type == "dm") {
       message.reply("Esse comando só pode ser usado em servidor.");
     } else {
-      if (message.member.hasPermission("ADMINISTRATOR")) {
-        if (message.member.guild.me.hasPermission("MANAGE_ROLES")) {
+      if (message.member.permissions.has("ADMINISTRATOR")) {
+        if (message.member.guild.me.permissions.has("MANAGE_ROLES")) {
           let cargoName = args[0];
 
           let cargo = message.member.guild.roles.cache.find(
@@ -88,7 +88,7 @@ class Role {
     if (message.channel.type == "dm") {
       message.reply("Esse comando só pode ser usado em servidor.");
     } else {
-      if (message.member.hasPermission("ADMINISTRATOR")) {
+      if (message.member.permissions.has("ADMINISTRATOR")) {
         let user = message.mentions.users.first();
         let cargoName = args[1];
 

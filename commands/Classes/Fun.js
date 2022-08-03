@@ -140,17 +140,16 @@ class Fun {
       messageTo: {
         user: "Aqui você digita a opção `[pedra | papel | tesoura]`.",
         opponent: `O usuário ${message.author.username}#${message.author.discriminator} te desafiou para uma partida de jokenpo!
-        Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]\``,
+Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]\``,
         timeout: "O tempo limite é de 60s.",
       },
     };
 
-    const Jokenpo = new _Jokenpo(message, args[0]);
+    const Jokenpo = new _Jokenpo(message);
     Jokenpo.setMessages(messages);
     Jokenpo.setLang("pt-br");
 
-    try {
-      Jokenpo.play().then(async () => {
+      Jokenpo.play(args[0]).then(async () => {
         Jokenpo.send();
 
         if (Jokenpo.getPlayersCount() === 1 && message.guild !== null) {
@@ -180,8 +179,7 @@ class Fun {
             });
           }
         }
-      });
-    } catch (TypeError) { }
+      }).catch(console.error);
   }
 
   risitas(message) {
