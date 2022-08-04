@@ -12,7 +12,7 @@
     "canvacord": "^5.0.8",
     "discord-blackjack": "^4.0.0",
     "discord-jokenpo": "^1.5.5",
-    "discord-leveling-firebase": "^0.9.1",
+    "discord-leveling-firebase": "^0.9.15",
     "discord.js": "^13.9.2",
     "dotenv": "^16.0.1",
     "firebase": "^9.6.10",
