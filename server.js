@@ -56,15 +56,9 @@ let countCommands = {
 };
 
 function showActivity(client) {
-  if (client.guilds.cache.size == 0 || client.guilds.cache.size == 1) {
-    client.user.setActivity(
-      "jj help | " + client.guilds.cache.size + " servidor"
-    );
-  } else {
-    client.user.setActivity(
-      "jj help | " + client.guilds.cache.size + " servidores"
-    );
-  }
+  let word = "servidores";
+  [0, 1].includes(client.guilds.cache.size) ? word = "servidor" : word = "servidores";
+  client.user.setActivity(`jj help | ${client.guilds.cache.size} ${word}`);
   // client.user.setActivity("Em manutenção.");
   // client.user.setStatus("idle"); // dnd, idle, online, invisible
 }
