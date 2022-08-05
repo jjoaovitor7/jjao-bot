@@ -1,52 +1,113 @@
 const { MessageEmbed } = require("discord.js");
-const { doc, updateDoc, deleteField, getDoc } = require("firebase/firestore");
+const axios = require("axios");
+const QuickChart = require("quickchart-js");
+const moment = require("moment");
 
 class Utils {
   bitcoinprice(message, args) {
-    if (args[0] == null || args[0] == "" || args[0] == " ") {
-      message.channel.send(
-        "Tente `jj bitcoinprice BRL` ou `jj bitcoinprice USD`."
-      );
-    } else if (args[0] == "BRL") {
-      const axios = require("axios");
-
-      axios
-        .get("https://blockchain.info/ticker")
-        .then(function (response) {
-          message.channel.send({
-            embeds: [
-              new MessageEmbed()
-                .setDescription(`:moneybag: Preço do Bitcoin (em R$)\nR$ ${response.data.BRL.buy}`)
-                .setFooter({ "text": "https://blockchain.info/ticker" })]
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () { });
-    } else if (args[0] == "USD") {
-      const axios = require("axios");
-
-      axios
-        .get("https://blockchain.info/ticker")
-        .then(function (response) {
-          message.channel.send({
-            embeds: [
-              new MessageEmbed()
-                .setDescription(`:moneybag: Preço do Bitcoin (em $)\n$ ${response.data.USD.buy}`)
-                .setFooter({ "text": "https://blockchain.info/ticker" })
-            ]
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () { });
-    } else {
-      message.channel.send(
-        "Só estão disponíveis as opções BRL e USD. \n`jj bitcoinprice BRL` ou `jj bitcoinprice USD`."
-      );
+    if (args[0] == null || args[0].trim() == "") {
+      message.channel.send("Tente `jj bitcoinprice BRL` ou `jj bitcoinprice USD`.");
     }
+
+    let currency = ["BRL", "R$"];
+    switch (args[0]) {
+      case "BRL":
+        currency[0] = "BRL";
+        currency[1] = "R$";
+        break;
+      case "USD":
+        currency[0] = "USD";
+        currency[1] = "$";
+        break;
+    }
+
+    axios
+      .get("https://blockchain.info/ticker")
+      .then((response) => {
+        message.channel.send({
+          embeds: [
+            new MessageEmbed()
+              .setTitle(":moneybag: Preço do Bitcoin")
+              .setDescription(`R$ ${response.data[currency[0]].buy}`)
+              .setFooter({ "text": "https://blockchain.info/ticker" })]
+        });
+      }).catch(console.error);
+  }
+
+  botinfo(client, message) {
+    const duration = moment.duration(client.uptime).format("D[dia(s)], H[hora(s)], m[min], s[s]");
+    const memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
+
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setColor("#0099ff")
+          .setTitle("Informações do Bot")
+          .addFields(
+            { name: "Usuários", value: String(client.users.cache.size), inline: true },
+            { name: "Servidores", value: String(client.guilds.cache.size), inline: true },
+            { name: "Criado em", value: "15 nov. 2020", inline: true },
+            {
+              name: "Uso de memória",
+              value: Math.round(memoryUsed * 100) / 100 + "MB",
+              inline: true
+            },
+            { name: "Uptime", value: duration, inline: true }
+          )
+          .setFooter({ "text": `ID: ${client.user.id}` })
+          .setTimestamp()
+      ]
+    });
+
+  }
+
+  countCommands(message, countCommands) {
+    let data_command = [];
+    let data_value = [];
+    for (let command in countCommands) {
+      data_command.push(command);
+      data_value.push(parseInt(countCommands[command]));
+    }
+
+    let chart = new QuickChart();
+    chart
+      .setConfig({
+        type: "horizontalBar",
+        data: {
+          labels: data_command,
+          datasets: [
+            {
+              label: "Quantidade de Uso de Comandos (Geral)",
+              data: data_value,
+              backgroundColor: "#006400",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                ticks: {
+                  beginAtZero: true,
+                  // max: 100,
+                  // min: 0,
+                },
+              },
+            ],
+          },
+        },
+      })
+      .setWidth(800)
+      .setHeight(1024);
+
+    message.channel.send({
+      embeds: [
+        new MessageEmbed().setTitle("Quantidade de Uso de Comandos")
+          .setDescription("obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.")
+          .setImage(chart.getUrl())
+      ]
+    });
   }
 
   help(message) {
@@ -55,17 +116,15 @@ class Utils {
         new MessageEmbed()
           .setColor("#0099ff")
           .setTitle("Comandos")
-          // .setDescription("**[top.gg](https://top.gg/bot/777665289793437759)**")
           .addFields(
             {
               name: "Geral",
               value: `\`jj avatar\`
 \`jj avatar2braille\`
-\`jj bitcoinprice\`
+\`jj bitcoinprice [BRL | USD]\`
 \`jj botinfo\`
 \`jj countcommands\`
 \`jj discord\`
-\`jj donate\`
 \`jj github\`
 \`jj help\`
 \`jj invite\`
@@ -94,33 +153,19 @@ class Utils {
               value: `\`jj coinsranking\`
 \`jj [daily | weekly | monthly]\`
 \`jj disablelevelingchannel\`
-\`jj profile\`
-\`jj profilecard\`
+\`jj [profile | profilecard]\`
 \`jj setlevelingchannel\`
 \`jj transfer\`
 \`jj xpranking\`
 `,
-              inline: true,
-            },
-            {
-              name: "Cargos",
-              value: `\`jj createrole [role]\`
-\`jj enterrole [role]\`
-\`jj deleterole [role]\`
-\`jj setinrole [user] [role]\`
-\`jj exitrole [role]\`
-`,
-              inline: true,
             }
           )
       ]
     });
   }
 
-  invite(message) {
-    message.channel.send(
-      "https://discord.com/oauth2/authorize?client_id=777665289793437759&permissions=3156032&scope=bot"
-    );
+  invite(client, message) {
+    message.channel.send(`https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=3156032&scope=bot`);
   }
 
   ping(client, message) {
@@ -139,17 +184,42 @@ class Utils {
     );
   }
 
-  // Networks
-  discord(message) {
-    message.channel.send("https://discord.gg/zz2MSDWk9a");
+  networks(message, network) {
+    switch (network) {
+      case "discord":
+        message.channel.send("https://discord.gg/zz2MSDWk9a");
+        break;
+      case "github":
+        message.channel.send("https://github.com/jjoaovitor7/jjao-bot");
+        break;
+    }
   }
 
-  github(message) {
-    message.channel.send("https://github.com/jjoaovitor7/jjao-bot");
-  }
-
-  kofi(message) {
-    message.channel.send("https://ko-fi.com/jjoaovitor7");
+  async serverinfo(message) {
+    const members = await message.guild.members.fetch();
+    const users = members.filter(member => !member.user.bot);
+    const bots = members.filter(member => member.user.bot);
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setTimestamp()
+          .setTitle(`${message.guild.name}`)
+          .setThumbnail(
+            "https://cdn.discordapp.com/icons/" +
+            message.guild.id +
+            "/" +
+            message.guild.icon +
+            ".png?size=1024"
+          )
+          .addFields(
+            { name: "Região do Servidor", value: message.guild.preferredLocale, inline: true },
+            { name: "Usuários", value: String(users.size), inline: true },
+            { name: "Bots", value: String(bots.size), inline: true },
+            { name: "Criado em", value: moment(message.guild.createdAt).format("LL") }
+          )
+          .setFooter({ "text": `ID: ${message.guild.id}` })
+      ]
+    });
   }
 
   async xpranking(message, leveling) {
@@ -157,9 +227,9 @@ class Utils {
     message.channel.send({
       embeds: [
         new MessageEmbed()
-        .setColor("0099ff")
-        .setTitle("Ranking de XP (do servidor)")
-        .setDescription(arr.join(" ").toString())
+          .setColor("0099ff")
+          .setTitle("Ranking de XP (do servidor)")
+          .setDescription(arr.join(" ").toString())
       ]
     });
   }

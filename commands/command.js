@@ -5,16 +5,14 @@ app = initializeApp(config.firebase_config);
 db = getFirestore(app);
 
 module.exports = function command(client, message, countCommands, Leveling) {
-    let command_filter = message.content.substr(3).split(" ");
-    let command = command_filter[0];
-    let args = command_filter.slice(1);
+    const command_filter = message.content.substr(3).split(" ");
+    const command = command_filter[0];
+    const args = command_filter.slice(1);
 
-    let Balance = require("./Classes/Balance.js");
-    let Fun = require("./Classes/Fun.js");
-    let Info = require("./Classes/Info.js");
-    let Profile = require("./Classes/Profile.js");
-    let Role = require("./Classes/Role.js");
-    let Utils = require("./Classes/Utils.js");
+    const Balance = require("./Classes/Balance.js");
+    const Fun = require("./Classes/Fun.js");
+    const Profile = require("./Classes/Profile.js");
+    const Utils = require("./Classes/Utils.js");
 
     let commands = {
         // GERAL
@@ -22,26 +20,25 @@ module.exports = function command(client, message, countCommands, Leveling) {
         avatar2braille: () => Fun.avatar2braille(message),
         // avatar2circle: () => Fun.avatar2circle(message),
         bitcoinprice: () => Utils.bitcoinprice(message, args),
-        botinfo: () => Info.botinfo(client, message),
-        countcommands: () => Info.countCommands(message, countCommands),
-        discord: () => Utils.discord(message),
-        donate: () => Utils.kofi(message),
-        github: () => Utils.github(message),
+        botinfo: () => Utils.botinfo(client, message),
+        countcommands: () => Utils.countCommands(message, countCommands),
+        discord: () => Utils.networks(message, "discord"),
+        github: () => Utils.networks(message, "github"),
         help: () => Utils.help(message),
-        invite: () => Utils.invite(message),
+        invite: () => Utils.invite(client, message),
         ping: () => Utils.ping(client, message),
-        serverinfo: () => Info.serverinfo(message),
+        serverinfo: () => Utils.serverinfo(message),
 
         // LEVELING E ECONOMIA
         coinsranking: () => Balance.moneyranking(db, message),
-        daily: () => Balance.daily(db, message),
+        daily: () => Balance.checkToAdd(db, message, "daily", "Dia"),
         disablelevelingchannel: () => Leveling.disablelevelingchannel(message),
-        monthly: () => Balance.monthly(db, message),
+        monthly: () => Balance.checkToAdd(db, message, "monthly", "Mês"),
         profile: () => Profile.profile(db, message, args),
         profilecard: () => Profile.profilecard(db, message),
         setlevelingchannel: () => Leveling.setlevelingchannel(message, args),
         xpranking: () => Utils.xpranking(message, Leveling),
-        weekly: () => Balance.weekly(db, message),
+        weekly: () => Balance.checkToAdd(db, message, "weekly", "Semana"),
         transfer: () => Balance.transfer(db, message, args),
 
         // ENTRETENIMENTO
@@ -54,14 +51,7 @@ module.exports = function command(client, message, countCommands, Leveling) {
         sadcat: () => Fun.sadcat(message),
         snake: () => Fun.snake(message),
         risitas: () => Fun.risitas(message),
-        word2ascii: () => Fun.word2ascii(message, args),
-
-        // CARGOS
-        createrole: () => Role.create(message, args),
-        enterrole: () => Role.enter(message, args),
-        deleterole: () => Role.delete(message, args),
-        exitrole: () => Role.exit(message, args),
-        setinrole: () => Role.setin(message, args),
+        word2ascii: () => Fun.word2ascii(message, args)
     };
 
     if (command in commands) {
