@@ -2,12 +2,18 @@ const config = require("./config.js");
 
 const { Client, Intents } = require("discord.js");
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES],
+  intents: [
+    Intents.FLAGS.DIRECT_MESSAGES,
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+  ],
 });
 
-let inCooldown = new Set();
-const Leveling = require("discord-leveling-firebase");
-const leveling = new Leveling(client, config.firebase_config);
+let interval = new Set();
+const _Leveling = require("discord-leveling-firebase");
+const Leveling = new _Leveling(client, config.firebase_config);
 
 let countCommands = {
   avatar: 0,
@@ -18,7 +24,6 @@ let countCommands = {
   botinfo: 0,
   countcommands: 0,
   discord: 0,
-  donate: 0,
   github: 0,
   help: 0,
   invite: 0,
@@ -45,53 +50,34 @@ let countCommands = {
   sadcat: 0,
   snake: 0,
   risitas: 0,
-  word2ascii: 0,
-
-  // CARGOS
-  createrole: 0,
-  enterrole: 0,
-  deleterole: 0,
-  exitrole: 0,
-  setinrole: 0,
+  word2ascii: 0
 };
 
-function showActivity(client) {
+client.on("ready", () => {
   let word = "servidores";
   [0, 1].includes(client.guilds.cache.size) ? word = "servidor" : word = "servidores";
   client.user.setActivity(`jj help | ${client.guilds.cache.size} ${word}`);
   // client.user.setActivity("Em manutenção.");
   // client.user.setStatus("idle"); // dnd, idle, online, invisible
-}
-
-client.on("ready", () => {
   console.log(`Conectado como: ${client.user.tag}.`);
-  showActivity(client);
 });
 
 client.on("messageCreate", async (message) => {
-  if (message.author.id == client.user.id || message.author.id == true) {
+  if (message.guild === null || message.guild === undefined
+    || message.author.id == client.user.id) {
     return;
   }
 
-  if (message.guild != null) {
-    if (
-      inCooldown.has(message.guild.id.concat(message.author.id)) &&
-      !message.content.startsWith(config.prefix)
-    ) {
-      return;
-    } else {
-      leveling.leveling(message);
-      inCooldown.add(message.guild.id.concat(message.author.id));
-      setTimeout(
-        () => inCooldown.delete(message.guild.id.concat(message.author.id)),
-        5000
-      );
-    }
+  if (!(interval.has(`${message.guild.id}${message.author.id}`))
+    && message.content.startsWith(config.prefix)) {
+    Leveling.leveling(message);
+    interval.add(message.guild.id.concat(message.author.id));
+    setTimeout(() => interval.delete(message.guild.id.concat(message.author.id)), 5000);
   }
 
   if (message.content.startsWith(config.prefix)) {
-    let command = require("./commands/command.js");
-    command(client, message, countCommands, leveling);
+    const command = require("./commands/command.js");
+    command(client, message, countCommands, Leveling);
   }
 });
 

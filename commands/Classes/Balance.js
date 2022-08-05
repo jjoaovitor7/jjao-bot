@@ -1,100 +1,51 @@
 const { MessageEmbed } = require("discord.js");
 const moment = require("moment");
-require("moment-duration-format");
 
 const { collection, doc, limit, orderBy, query, getDoc, getDocs, updateDoc } = require("firebase/firestore");
 
-async function addBonus(database, message, type) {
-  let qtde = Math.floor(Math.random() * 50) + 1;
-  message.channel.send({embeds: [
-    new MessageEmbed()
-      .setColor("#0099ff")
-      .addFields({name: `Moedas do ${type}`, value: `${qtde} moedas.`})
-  ]});
-
-  const guild = doc(database, "Usuarios", message.guild.id);
-  const user = doc(guild, "Usuarios", message.author.id);
-  const user_doc = await getDoc(user);
-
-  switch (type) {
-    case "Dia":
-      updateDoc(user, {
-        money: user_doc.data().money + qtde,
-        daily: Date.now(),
-      });
-      break;
-    case "Semana":
-      updateDoc(user, {
-        money: user_doc.data().money + qtde,
-        weekly: Date.now(),
-      });
-      break;
-    case "Mês":
-      updateDoc(user, {
-        money: user_doc.data().money + qtde,
-        monthly: Date.now(),
-      });
-      break;
-  }
-
-}
-
-const timeout = {
-    "day": 86400000,
-    "week": 604800000,
-    "month": 2592000000,
-}
-
 class Balance {
-  async #getUser(database, message) {
+  async checkToAdd(database, message, type, text) {
     const guild = doc(database, "Usuarios", message.guild.id);
     const member = doc(guild, "Usuarios", message.author.id);
     const member_doc = await getDoc(member);
-    return member_doc.data();
-  }
 
-  async daily(database, message) {
-    let data = await this.#getUser(database, message);
-    let daily = data.daily;
+    let time = member_doc.data();
+    time = time[type];
 
-    const calc = timeout.day - (Date.now() - daily);
-    if (daily != 0 && calc > 0) {
-      let time = moment.duration(calc);
-      message.reply(
-        `você já pegou suas moedas do dia.\nVocê precisa esperar ${time.hours()}h ${time.minutes()}m ${time.seconds()}s para poder pegar novamente.`
-      );
+    if (Date.now() < time) {
+      moment.locale("pt-br");
+      const duration = moment(time).format("lll");
+      message.reply(`Poderá pegar novamente em ${duration}.`);
     } else {
-      addBonus(database, message, "Dia");
-    }
-  }
+      const amount =  Math.floor(Math.random() * 55) + 1;
+      message.channel.send({
+        embeds: [
+          new MessageEmbed()
+            .setColor("#0099ff")
+            .addFields({ name: `Moedas (${text})`, value: `${amount} moedas.` })
+        ]
+      });
 
-  async weekly(database, message) {
-    let data = await this.#getUser(database, message);
-    let weekly = data.weekly;
-
-    const calc = timeout.week - (Date.now() - weekly);
-    if (weekly != 0 && calc > 0) {
-      let time = moment.duration(calc);
-      message.reply(
-        `você já pegou suas moedas da semana.\nVocê precisa esperar ${time.days()}d ${time.hours()}h ${time.minutes()}m ${time.seconds()}s para poder pegar novamente.`
-      );
-    } else {
-      addBonus(database, message, "Semana");
-    }
-  }
-
-  async monthly(database, message) {
-    let data = await this.#getUser(database, message);
-    let monthly = data.monthly;
-
-    let calc = timeout.month - (Date.now() - monthly);
-    if (monthly != 0 &&  calc > 0) {
-      let time = moment.duration(calc);
-      message.reply(
-        `você já pegou suas moedas do mês.\nVocê precisa esperar ${time.days()}d ${time.hours()}h ${time.minutes()}m ${time.seconds()}s para poder pegar novamente.`
-      );
-    } else {
-      addBonus(database, message, "Mês");
+      switch (type) {
+        case "daily":
+          updateDoc(member, {
+            money: member_doc.data().money + amount,
+            daily: Date.now() + 86400000,
+          });
+          break;
+        case "weekly":
+          updateDoc(member, {
+            money: member_doc.data().money + amount,
+            weekly: Date.now() +  604800000,
+          });
+          break;
+        case "monthly":
+          updateDoc(member, {
+            money: member_doc.data().money + amount,
+            monthly: Date.now() + 2592000000,
+          });
+          break;
+      }
     }
   }
 
@@ -111,9 +62,9 @@ class Balance {
     message.channel.send({
       embeds: [
         new MessageEmbed()
-        .setColor("ffd700")
-        .setTitle("Ranking de Moedas (do servidor)")
-        .setDescription(arr.join(" ").toString())
+          .setColor("ffd700")
+          .setTitle("Ranking de Moedas (do servidor)")
+          .setDescription(arr.join(" ").toString())
       ]
     });
   }
