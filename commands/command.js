@@ -23,9 +23,7 @@ module.exports = function command(client, message, countCommands, Leveling) {
         botinfo: () => Utils.botinfo(client, message),
         countcommands: () => Utils.countCommands(message, countCommands),
         discord: () => Utils.networks(message, "discord"),
-        github: () => Utils.networks(message, "github"),
         help: () => Utils.help(message),
-        invite: () => Utils.invite(client, message),
         ping: () => Utils.ping(client, message),
         serverinfo: () => Utils.serverinfo(message),
 

@@ -2,16 +2,16 @@
   "name": "jjao-bot",
   "version": "2.0.0",
   "description": "jjao Discord bot",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "ascii-art-font": "^1.0.2",
     "axios": "^0.27.2",
     "canvacord": "^5.0.8",
     "discord-blackjack": "^4.0.0",
-    "discord-jokenpo": "^1.5.8",
+    "discord-jokenpo": "^1.6.5",
     "discord-leveling-firebase": "^0.9.15",
     "discord.js": "^13.9.2",
     "dotenv": "^16.0.1",

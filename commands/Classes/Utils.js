@@ -28,7 +28,7 @@ class Utils {
           embeds: [
             new MessageEmbed()
               .setTitle(":moneybag: Preço do Bitcoin")
-              .setDescription(`R$ ${response.data[currency[0]].buy}`)
+              .setDescription(`${currency[1]} ${response.data[currency[0]].buy}`)
               .setFooter({ "text": "https://blockchain.info/ticker" })]
         });
       }).catch(console.error);
@@ -47,15 +47,11 @@ class Utils {
             { name: "Usuários", value: String(client.users.cache.size), inline: true },
             { name: "Servidores", value: String(client.guilds.cache.size), inline: true },
             { name: "Criado em", value: "15 nov. 2020", inline: true },
-            {
-              name: "Uso de memória",
-              value: Math.round(memoryUsed * 100) / 100 + "MB",
-              inline: true
-            },
-            { name: "Uptime", value: duration, inline: true }
-          )
-          .setFooter({ "text": `ID: ${client.user.id}` })
-          .setTimestamp()
+            { name: "Uso de memória", value: Math.round(memoryUsed * 100) / 100 + "MB", inline: true },
+            { name: "Uptime", value: duration, inline: true },
+            { name: "Invite", value: `[URL](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=124992&scope=bot)`, inline: true },
+            { name: "Repositório", value: "[URL](https://github.com/jjoaovitor7/jjao-bot)", inline: true}
+          ).setFooter({ "text": `ID: ${client.user.id}` }).setTimestamp()
       ]
     });
 
@@ -104,7 +100,7 @@ class Utils {
     message.channel.send({
       embeds: [
         new MessageEmbed().setTitle("Quantidade de Uso de Comandos")
-          .setDescription("obs.:\nquando o bot é desligado ou reiniciado\n a quantidade é zerada.")
+          .setDescription("obs.: Quando o bot é reiniciado a quantidade é zerada.")
           .setImage(chart.getUrl())
       ]
     });
@@ -125,9 +121,7 @@ class Utils {
 \`jj botinfo\`
 \`jj countcommands\`
 \`jj discord\`
-\`jj github\`
 \`jj help\`
-\`jj invite\`
 \`jj ping\`
 \`jj serverinfo\`
 `,
@@ -164,10 +158,6 @@ class Utils {
     });
   }
 
-  invite(client, message) {
-    message.channel.send(`https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=3156032&scope=bot`);
-  }
-
   ping(client, message) {
     const ping = Date.now() - message.createdTimestamp;
     const pingbot = Math.round(client.ws.ping);
@@ -188,9 +178,6 @@ class Utils {
     switch (network) {
       case "discord":
         message.channel.send("https://discord.gg/zz2MSDWk9a");
-        break;
-      case "github":
-        message.channel.send("https://github.com/jjoaovitor7/jjao-bot");
         break;
     }
   }

@@ -24,9 +24,7 @@ let countCommands = {
   botinfo: 0,
   countcommands: 0,
   discord: 0,
-  github: 0,
   help: 0,
-  invite: 0,
   ping: 0,
   serverinfo: 0,
 
