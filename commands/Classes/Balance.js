@@ -17,7 +17,7 @@ class Balance {
       const duration = moment(time).format("lll");
       message.reply(`Poderá pegar novamente em ${duration}.`);
     } else {
-      const amount =  Math.floor(Math.random() * 55) + 1;
+      const amount = Math.floor(Math.random() * 55) + 1;
       message.channel.send({
         embeds: [
           new MessageEmbed()
@@ -36,7 +36,7 @@ class Balance {
         case "weekly":
           updateDoc(member, {
             money: member_doc.data().money + amount,
-            weekly: Date.now() +  604800000,
+            weekly: Date.now() + 604800000,
           });
           break;
         case "monthly":

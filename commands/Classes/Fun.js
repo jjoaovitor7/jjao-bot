@@ -123,16 +123,10 @@ class Fun {
   }
 
   jokenpo(database, client, message, args) {
-    const _Jokenpo = require("discord-jokenpo");
+    const J = require("discord-jokenpo");
 
     const messages = {
       fail: "Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`",
-      gameResults: {
-        draw: "Empate!",
-        botWinner: `<@${client.user.id}> ganhou.`,
-        opponentWinner: `${message.mentions.users.first()} ganhou.`,
-        userWinner: `<@${message.author.id}> ganhou.`,
-      },
       gameStatus: {
         inProgress: "Partida iniciada ou há uma partida em andamento.",
         cancel: "Partida cancelada.",
@@ -145,19 +139,24 @@ Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]
       },
     };
 
-    const Jokenpo = new _Jokenpo(message);
-    Jokenpo.setMessages(messages);
-    Jokenpo.setLang("pt-br");
+    const Jokenpo = new J(message);
+    Jokenpo.setConfig(messages, "pt-br");
 
-      Jokenpo.play(args[0]).then(async () => {
-        Jokenpo.send();
+    Jokenpo.play(args[0]).then(async () => {
+      if (message.guild !== null) {
+        const r = Jokenpo.result();
+        const choices = Jokenpo.getChoices();
 
-        if (Jokenpo.getPlayersCount() === 1 && message.guild !== null) {
-          const result = Jokenpo.result();
-          if (result.player === false && result.opponent === false) {
-          } else if (result.opponent === true) {
+        const text_bot = `\`1:\` ${choices.pone}\n\`2:\` ${choices.bot}`;
+        const text = `\`1:\` ${choices.pone}\n\`2:\` ${choices.ptwo}`;
+
+        if ("bot" in r) {
+          if (r.player === false && r.bot === false) {
+            message.channel.send(`${text_bot}\nEmpate!`);
+          } else if (r.bot === true) {
             let random = Math.floor(Math.random() * 6 + 1);
-            message.channel.send(`Você perdeu \`${random} coins\`!`);
+            message.channel.send(`${text_bot}\n<@${client.user.id}> ganhou.
+Você perdeu \`${random} coins\`!`);
 
             const guild = doc(database, "Usuarios", message.guild.id);
             const user = doc(guild, "Usuarios", message.author.id);
@@ -166,9 +165,10 @@ Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]
             updateDoc(user, {
               money: user_doc.data().money - random
             });
-          } else if (result.player === true) {
+          } else if (r.player === true) {
             let random = Math.floor(Math.random() * 11 + 1);
-            message.channel.send(`Você ganhou \`${random} coins\`!`);
+            message.channel.send(`${text_bot}\n<@${message.author.id}> ganhou.
+Você ganhou \`${random} coins\`!`);
 
             const guild = doc(database, "Usuarios", message.guild.id);
             const user = doc(guild, "Usuarios", message.author.id);
@@ -178,8 +178,18 @@ Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]
               money: user_doc.data().money + random
             });
           }
+        } else {
+          if (r.player1 === false && r.player2 === false) {
+            message.channel.send(`${text}\nEmpate!`);
+          } else if (r.player2 === true) {
+            message.channel.send(`${text}\n${message.mentions.users.first()} ganhou.`);
+
+          } else if (r.player1 === true) {
+            message.channel.send(`${text}\n<@${message.author.id}> ganhou.`);
+          }
         }
-      }).catch(console.error);
+      }
+    }).catch(console.error);
   }
 
   risitas(message) {
@@ -195,44 +205,20 @@ Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]
   }
 
   rndnote(message) {
-    let MidiWriter = require("midi-writer-js");
-
+    const MidiWriter = require("midi-writer-js");
     let track = new MidiWriter.Track();
     track.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
 
     const notes = [
-      "A3",
-      "A4",
-      "Ab4",
-      "A5",
-      "Bb2",
-      "Bb3",
-      "B4",
-      "Bb4",
-      "C4",
-      "C5",
-      "C#5",
-      "C6",
-      "D5",
-      "D#5",
-      "E4",
-      "E5",
-      "F3",
-      "F#3",
-      "F5",
-      "F#5",
-      "G3",
-      "G#3",
-      "G4",
-      "Gb4",
-      "G5",
-      "Gb5",
-    ];
-    let notes_arr = [];
+      "A3", "A4", "Ab4", "A5",
+      "Bb2", "Bb3", "B4", "Bb4",
+      "C4", "C5", "C#5", "C6",
+      "D5", "D#5", "E4", "E5",
+      "F3", "F#3", "F5", "F#5",
+      "G3", "G#3", "G4", "Gb4", "G5", "Gb5"];
 
-    notes_arr.push(notes[Math.floor(Math.random() * (notes.length - 1))]);
     track.addEvent(
-      new MidiWriter.NoteEvent({ pitch: notes_arr, duration: "8" })
+      new MidiWriter.NoteEvent({ pitch: [notes[Math.floor(Math.random() * (notes.length - 1))]], duration: "8" })
     );
 
     let writer = new MidiWriter.Writer(track);
@@ -243,8 +229,8 @@ Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]
   }
 
   word2ascii(message, args) {
-    if (args != null && args != "" && args != " ") {
-      Font.create(args[0], "Doom", function(err, rendered) {
+    if (args != null && args.trim() != "") {
+      Font.create(args[0], "Doom", function (err, rendered) {
         message.channel.send(`\`\`\`${rendered}\`\`\``);
       })
     }
