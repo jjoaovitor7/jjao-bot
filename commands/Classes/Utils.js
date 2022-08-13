@@ -210,7 +210,7 @@ class Utils {
   }
 
   async xpranking(message, leveling) {
-    const arr = await leveling.levelingranking(message, 5);
+    const arr = await leveling.ranking(message, 5);
     message.channel.send({
       embeds: [
         new MessageEmbed()

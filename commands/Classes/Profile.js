@@ -25,8 +25,8 @@ class Profile {
   }
 
   async #getUser(database, message) {
-    const guild = doc(database, "Usuarios", message.guild.id);
-    const member = doc(guild, "Usuarios", message.author.id);
+    const guild = doc(database, "Guilds", message.guild.id);
+    const member = doc(guild, "Members", message.author.id);
     const member_doc = await getDoc(member);
     return member_doc.data();
   }

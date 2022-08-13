@@ -5,8 +5,8 @@ const { collection, doc, limit, orderBy, query, getDoc, getDocs, updateDoc } = r
 
 class Balance {
   async checkToAdd(database, message, type, text) {
-    const guild = doc(database, "Usuarios", message.guild.id);
-    const member = doc(guild, "Usuarios", message.author.id);
+    const guild = doc(database, "Guilds", message.guild.id);
+    const member = doc(guild, "Members", message.author.id);
     const member_doc = await getDoc(member);
 
     let time = member_doc.data();
@@ -50,7 +50,7 @@ class Balance {
   }
 
   async moneyranking(database, message) {
-    const guild = collection(database, "Usuarios", message.guild.id, "Usuarios");
+    const guild = collection(database, "Guilds", message.guild.id, "Members");
     const docs_filter = query(guild, limit(5), orderBy("money", "desc"));
     const docs = await getDocs(docs_filter);
     let arr = [];
@@ -80,18 +80,18 @@ class Balance {
       toTransfer.bot == false &&
       Number.isInteger(args[0])
     ) {
-      const guild = doc(database, "Usuarios", message.guild.id);
-      const user = doc(guild, "Usuarios", message.author.id);
-      const user_doc = await getDoc(user);
-      const otheruser = doc(guild, "Usuarios", toTransfer.id);
-      const otheruser_doc = await getDoc(otheruser);
+      const guild = doc(database, "Guilds", message.guild.id);
+      const member = doc(guild, "Members", message.author.id);
+      const member_doc = await getDoc(member);
+      const othermember = doc(guild, "Members", toTransfer.id);
+      const othermember_doc = await getDoc(othermember);
 
-      if (args[0] <= user_doc.data().money) {
-        updateDoc(user, {
-          money: user_doc.data().money - args[0],
+      if (args[0] <= member_doc.data().money) {
+        updateDoc(member, {
+          money: member_doc.data().money - args[0],
         }).then(() => {
-          updateDoc(otheruser, {
-            money: otheruser_doc.data().money + args[0],
+          updateDoc(othermember, {
+            money: othermember_doc.data().money + args[0],
           }).then(() => {
             message.channel.send(
               `Transferência de \`${parseInt(

@@ -158,8 +158,8 @@ Para aceitar é necessário apenas digitar a opção \`[pedra | papel | tesoura]
             message.channel.send(`${text_bot}\n<@${client.user.id}> ganhou.
 Você perdeu \`${random} coins\`!`);
 
-            const guild = doc(database, "Usuarios", message.guild.id);
-            const user = doc(guild, "Usuarios", message.author.id);
+            const guild = doc(database, "Guilds", message.guild.id);
+            const user = doc(guild, "Members", message.author.id);
             const user_doc = await getDoc(user);
 
             updateDoc(user, {
@@ -170,8 +170,8 @@ Você perdeu \`${random} coins\`!`);
             message.channel.send(`${text_bot}\n<@${message.author.id}> ganhou.
 Você ganhou \`${random} coins\`!`);
 
-            const guild = doc(database, "Usuarios", message.guild.id);
-            const user = doc(guild, "Usuarios", message.author.id);
+            const guild = doc(database, "Guilds", message.guild.id);
+            const user = doc(guild, "Members", message.author.id);
             const user_doc = await getDoc(user);
 
             updateDoc(user, {
