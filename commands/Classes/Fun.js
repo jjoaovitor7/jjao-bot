@@ -11,24 +11,6 @@ const snakeGame = new SnakeGame({
 });
 
 class Fun {
-  async avatar2braille(message) {
-    const { braillefy } = require("img2braille");
-
-    const options = {
-      dither: false,
-      invert: false,
-    };
-
-    let user = message.mentions.users.first();
-
-    const imgbraille = await braillefy(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`
-      , 20, // width
-      options
-    );
-
-    message.channel.send(imgbraille);
-  }
-
   avatar2pixel(message) {
     let user = message.mentions.users.first();
     if (user != undefined) {
@@ -55,31 +37,6 @@ class Fun {
     }
   }
 
-  // avatar2circle(message) {
-  //   let user = message.mentions.users.first();
-
-  //   if (user != undefined) {
-  //     const canvacord = require("canvacord");
-
-  //     canvacord.Canvas.circle(
-  //       `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`,
-  //       5
-  //     ).then(function (img) {
-  //       const attachment = new MessageAttachment(img, "circle.png");
-  //       message.channel.send({ files: [attachment] });
-  //     });
-  //   } else {
-  //     const canvacord = require("canvacord");
-
-  //     canvacord.Canvas.circle(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=1024`,
-  //       5
-  //     ).then(function (img) {
-  //       const attachment = new MessageAttachment(img, "circle.png");
-  //       message.channel.send({ files: [attachment] });
-  //     });
-  //   }
-  // }
-
   async blackjack(message) {
     let game = await discord_blackjack(message, { resultEmbed: false });
 
@@ -91,16 +48,6 @@ class Fun {
         message.channel.send("Você perdeu.");
         break;
     }
-  }
-
-  clap(message) {
-    message.channel.send({
-      embeds: [
-        new MessageEmbed()
-          .setImage("https://cdn.pixabay.com/photo/2019/07/17/02/59/applause-4342965_960_720.jpg")
-          .setFooter({ "text": "https://pixabay.com/pt/illustrations/aplausos-mãos-bater-palmas-black-4342965/" })
-      ]
-    });
   }
 
   cookie(message) {
@@ -190,14 +137,6 @@ Você ganhou \`${random} coins\`!`);
         }
       }
     }).catch(console.error);
-  }
-
-  risitas(message) {
-    message.channel.send("https://www.youtube.com/watch?v=QT13kk8HDDo");
-  }
-
-  sadcat(message) {
-    message.channel.send("https://tenor.com/view/austin-sad-cat-gif-18483293");
   }
 
   async snake(message) {

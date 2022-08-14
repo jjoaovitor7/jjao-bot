@@ -115,42 +115,38 @@ class Utils {
           .addFields(
             {
               name: "Geral",
-              value: `\`jj avatar\`
-\`jj avatar2braille\`
-\`jj bitcoinprice [BRL | USD]\`
-\`jj botinfo\`
-\`jj countcommands\`
-\`jj discord\`
-\`jj help\`
-\`jj ping\`
-\`jj serverinfo\`
+              value: `\`\`\`jj avatar
+jj bitcoinprice [BRL | USD]
+jj botinfo | serverinfo
+jj countcommands
+jj discord
+jj help
+jj ping
+\`\`\`
 `,
               inline: true,
             },
             {
               name: "Entretenimento",
-              value: `\`jj avatar2pixel\`
-\`jj blackjack\`
-\`jj clap\`
-\`jj cookie\`
-\`jj jokenpo\`
-\`jj risitas\`
-\`jj rndnote\`
-\`jj sadcat\`
-\`jj snake\`
-\`jj word2ascii\`
+              value: `\`\`\`jj avatar2pixel
+jj blackjack
+jj cookie
+jj jokenpo
+jj rndnote
+jj snake
+jj word2ascii
+\`\`\`
 `,
               inline: true,
             },
             {
               name: "Leveling e Economia",
-              value: `\`jj coinsranking\`
-\`jj [daily | weekly | monthly]\`
-\`jj disablelevelingchannel\`
-\`jj [profile | profilecard]\`
-\`jj setlevelingchannel\`
-\`jj transfer\`
-\`jj xpranking\`
+              value: `\`\`\`jj coinsranking | xpranking
+jj daily | weekly | monthly
+jj setlevelingchannel | disablelevelingchannel
+jj profile | profilecard
+jj transfer
+\`\`\`
 `,
             }
           )
@@ -191,13 +187,7 @@ class Utils {
         new MessageEmbed()
           .setTimestamp()
           .setTitle(`${message.guild.name}`)
-          .setThumbnail(
-            "https://cdn.discordapp.com/icons/" +
-            message.guild.id +
-            "/" +
-            message.guild.icon +
-            ".png?size=1024"
-          )
+          .setThumbnail(`https://cdn.discordapp.com/icons/${message.guild.id}/${message.guild.icon}.png?size=1024`)
           .addFields(
             { name: "Região do Servidor", value: message.guild.preferredLocale, inline: true },
             { name: "Usuários", value: String(users.size), inline: true },

@@ -17,8 +17,6 @@ const Leveling = new _Leveling(client, config.firebase_config);
 
 let countCommands = {
   avatar: 0,
-  avatar2braille: 0,
-  // avatar2circle: 0,
   bitcoinprice: 0,
   blackjack: 0,
   botinfo: 0,
@@ -41,22 +39,23 @@ let countCommands = {
 
   // ENTRETENIMENTO
   avatar2pixel: 0,
-  clap: 0,
   cookie: 0,
   jokenpo: 0,
   rndnote: 0,
-  sadcat: 0,
   snake: 0,
-  risitas: 0,
   word2ascii: 0
 };
 
 client.on("ready", () => {
   let word = "servidores";
   [0, 1].includes(client.guilds.cache.size) ? word = "servidor" : word = "servidores";
-  client.user.setActivity(`jj help | ${client.guilds.cache.size} ${word}`);
-  // client.user.setActivity("Em manutenção.");
-  // client.user.setStatus("idle"); // dnd, idle, online, invisible
+  client.user.setPresence({
+    status: "online", // dnd, idle, online, invisible
+    activities: [{
+      name: `jj help | ${client.guilds.cache.size} ${word}`,
+      type: "PLAYING"
+    }]
+  });
   console.log(`Conectado como: ${client.user.tag}.`);
 });
 

@@ -17,8 +17,6 @@ module.exports = function command(client, message, countCommands, Leveling) {
     let commands = {
         // GERAL
         avatar: () => Profile.avatar(message),
-        avatar2braille: () => Fun.avatar2braille(message),
-        // avatar2circle: () => Fun.avatar2circle(message),
         bitcoinprice: () => Utils.bitcoinprice(message, args),
         botinfo: () => Utils.botinfo(client, message),
         countcommands: () => Utils.countCommands(message, countCommands),
@@ -42,13 +40,10 @@ module.exports = function command(client, message, countCommands, Leveling) {
         // ENTRETENIMENTO
         avatar2pixel: () => Fun.avatar2pixel(message),
         blackjack: () => Fun.blackjack(message),
-        clap: () => Fun.clap(message),
         cookie: () => Fun.cookie(message),
         jokenpo: () => Fun.jokenpo(db, client, message, args),
         rndnote: () => Fun.rndnote(message),
-        sadcat: () => Fun.sadcat(message),
         snake: () => Fun.snake(message),
-        risitas: () => Fun.risitas(message),
         word2ascii: () => Fun.word2ascii(message, args)
     };
 
