@@ -16,7 +16,6 @@ class Profile {
     }
 
     let user = message.mentions.users.first();
-
     if (user == undefined) {
       sendAvatar(message.author);
     } else {
@@ -24,21 +23,15 @@ class Profile {
     }
   }
 
-  async #getUser(database, message) {
-    const guild = doc(database, "Guilds", message.guild.id);
-    const member = doc(guild, "Members", message.author.id);
+  async #getUser(database, guild_id, user_id) {
+    const guild = doc(database, "Guilds", guild_id);
+    const member = doc(guild, "Members", user_id);
     const member_doc = await getDoc(member);
     return member_doc.data();
   }
 
   async profile(database, message, args) {
     function embedProfile(userinfo, profile) {
-      if (profile == undefined || profile == undefined) {
-        return message.reply(
-          "ô poxa, você ou esse outro usuário ainda não está registrado no Banco de Dados (do bot) desse servidor =/"
-        );
-      }
-
       return message.channel.send({
         embeds: [
           new MessageEmbed()
@@ -52,38 +45,35 @@ class Profile {
             )
             .setThumbnail(`https://cdn.discordapp.com/avatars/${userinfo.id}/${userinfo.avatar}.png?size=1024`
             )
-            .setFooter({ "text": `ID: ${message.author.id}` })
+            .setFooter({ "text": `ID: ${userinfo.id}` })
         ]
       });
     }
 
-    const profile = await this.#getUser(database, message);
-    if (args[0] == null || args[0] == "") {
-      embedProfile(message.author, profile);
+    if (args[0] === undefined || args[0] === null || args[0].trim() == "") {
+      const data = await this.#getUser(database, message.guild.id, message.author.id);
+      embedProfile(message.author, data);
     } else {
-      let user = message.mentions.users.first();
-      if (user == undefined) {
-        embedProfile(message.author, profile);
-      } else {
-        embedProfile(user, profile);
-      }
+      const user = message.mentions.users.first();
+      const data = await this.#getUser(database, message.guild.id, user.id);
+      embedProfile(user, data);
     }
   }
 
   async profilecard(database, message) {
     const canvacord = require("canvacord");
 
-    let data = await this.#getUser(database, message);
-    let xp = data.xp;
-    let level = data.level;
-    let money = data.money;
+    const data = await this.#getUser(database, message.guild.id, message.author.id);
+    const xp = data.xp;
+    const level = data.level;
+    const coins = data.money;
 
     const rankCard = new canvacord.Rank()
       .setAvatar(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=1024`)
       .setCurrentXP(xp)
       .setRequiredXP((level + 1) * 100)
       .setLevel(level)
-      .setRank(money, "SALDO (Moedas)", true)
+      .setRank(coins, "SALDO (Moedas)", true)
       .setProgressBar("#fff", "COLOR")
       .setUsername(message.author.username)
       .setDiscriminator(message.author.discriminator);
