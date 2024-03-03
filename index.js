@@ -79,3 +79,7 @@ client.on("messageCreate", async (message) => {
 });
 
 client.login(config.token);
+
+module.exports = function handler(req, res) {
+  res.send("<html><head><title>JJao</title></head><body><p>Discord Bot, JJao#6517.</p></body></html>");
+}

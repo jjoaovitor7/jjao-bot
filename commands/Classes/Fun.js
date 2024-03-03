@@ -168,7 +168,7 @@ Você ganhou \`${random} coins\`!`);
   }
 
   word2ascii(message, args) {
-    if (args != null && args.trim() != "") {
+    if (args != null && args[0].trim() != "") {
       Font.create(args[0], "Doom", function (err, rendered) {
         message.channel.send(`\`\`\`${rendered}\`\`\``);
       })
