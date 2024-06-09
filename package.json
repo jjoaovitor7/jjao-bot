@@ -12,8 +12,8 @@
     "dev": "env TZ='America/Bahia' nodemon index.js"
   },
   "devDependencies": {
-    "pm2": "^5.4.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "pm2": "^5.4.0"
   },
   "dependencies": {
     "ascii-art-font": "^1.0.2",
@@ -24,6 +24,7 @@
     "discord-leveling-firebase": "^0.9.25",
     "discord.js": "^13.9.2",
     "dotenv": "^16.0.1",
+    "express": "^4.19.2",
     "firebase": "^9.6.10",
     "midi-writer-js": "^3.0.0",
     "moment": "^2.29.1",

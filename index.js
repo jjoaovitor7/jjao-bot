@@ -1,4 +1,5 @@
 const config = require("./config.js");
+const runServer = require("./server.js");
 
 const { Client, Intents } = require("discord.js");
 const client = new Client({
@@ -79,3 +80,4 @@ client.on("messageCreate", async (message) => {
 });
 
 client.login(config.token);
+runServer();
