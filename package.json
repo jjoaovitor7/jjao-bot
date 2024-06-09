@@ -3,20 +3,29 @@
   "version": "2.0.0",
   "description": "jjao Discord bot",
   "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "env TZ='America/Bahia' pm2 start index.js",
+    "build": "echo 'skipping...'",
+    "dev": "env TZ='America/Bahia' nodemon index.js"
+  },
+  "devDependencies": {
+    "pm2": "^5.4.0",
+    "nodemon": "^3.1.0"
   },
   "dependencies": {
     "ascii-art-font": "^1.0.2",
-    "axios": "^0.27.2",
-    "canvacord": "^5.4.4",
+    "axios": "^1.0.0",
+    "canvacord": "^5.4.10",
     "discord-blackjack": "^4.0.0",
     "discord-jokenpo": "^1.6.65",
     "discord-leveling-firebase": "^0.9.25",
     "discord.js": "^13.9.2",
     "dotenv": "^16.0.1",
     "firebase": "^9.6.10",
-    "midi-writer-js": "^2.1.0",
+    "midi-writer-js": "^3.0.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "quickchart-js": "^3.0.2",

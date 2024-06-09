@@ -1,0 +1,24 @@
+volumes:
+  app:
+
+networks:
+  jjao:
+
+services:
+  app:
+    image: jjao:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "jjao"
+    networks:
+      jjao:
+    logging:
+      driver: "json-file"
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8081:3000"
+    volumes:
+      - app:/usr/src/app
