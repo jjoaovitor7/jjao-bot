@@ -1,7 +1,15 @@
 const { MessageEmbed } = require("discord.js");
 const moment = require("moment");
-
-const { collection, doc, limit, orderBy, query, getDoc, getDocs, updateDoc } = require("firebase/firestore");
+const { prefix } = require("../../config");
+const {
+  collection,
+  doc,
+  limit,
+  orderBy,
+  query,
+  getDoc,
+  getDocs,
+  updateDoc } = require("firebase/firestore");
 
 class Balance {
   async checkToAdd(database, message, type, text) {

@@ -9,10 +9,10 @@ module.exports = function command(client, message, countCommands, Leveling) {
     const command = command_filter[0];
     const args = command_filter.slice(1);
 
-    const Balance = require("./Classes/Balance.js");
-    const Fun = require("./Classes/Fun.js");
-    const Profile = require("./Classes/Profile.js");
-    const Utils = require("./Classes/Utils.js");
+    const Balance = require("./Classes/Balance");
+    const Fun = require("./Classes/Fun");
+    const Profile = require("./Classes/Profile");
+    const Utils = require("./Classes/Utils");
 
     let commands = {
         // GERAL
@@ -51,6 +51,6 @@ module.exports = function command(client, message, countCommands, Leveling) {
         commands[command]();
         countCommands[command] = parseInt(countCommands[command]) + 1;
     } else {
-        message.channel.send({ content: "\`jj help\` para ver os comandos disponíveis." });
+        message.channel.send({ content: `\`${config.prefix} help\` para ver os comandos disponíveis.` });
     }
 };

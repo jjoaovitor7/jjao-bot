@@ -2,6 +2,7 @@ const { MessageAttachment, MessageEmbed } = require("discord.js");
 const { doc, updateDoc, getDoc } = require("firebase/firestore");
 const Font = require("ascii-art-font");
 const discord_blackjack = require("discord-blackjack");
+const { prefix } = require("../../config");
 const SnakeGame = require("snakecord");
 const snakeGame = new SnakeGame({
   title: "Snake",
@@ -73,7 +74,7 @@ class Fun {
     const J = require("discord-jokenpo");
 
     const messages = {
-      fail: "Tente jj jokenpo `[pedra|papel|tesoura]`.\nex.: `jj jokenpo pedra`",
+      fail: `Tente ${prefix} jokenpo \`[pedra|papel|tesoura]\`.\nex.: \`${prefix} jokenpo pedra\``,
       gameStatus: {
         inProgress: "Partida iniciada ou há uma partida em andamento.",
         cancel: "Partida cancelada.",

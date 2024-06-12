@@ -2,11 +2,12 @@ const { MessageEmbed } = require("discord.js");
 const axios = require("axios");
 const QuickChart = require("quickchart-js");
 const moment = require("moment");
+const { prefix } = require("../../config");
 
 class Utils {
   bitcoinprice(message, args) {
     if (args[0] == null || args[0].trim() == "") {
-      message.channel.send("Tente `jj bitcoinprice BRL` ou `jj bitcoinprice USD`.");
+      message.channel.send(`Tente \`${prefix} bitcoinprice BRL\` ou \`${prefix} bitcoinprice USD\`.`);
     }
 
     let currency = ["BRL", "R$"];
@@ -49,8 +50,8 @@ class Utils {
             { name: "Criado em", value: "15 nov. 2020", inline: true },
             { name: "Uso de memória", value: Math.round(memoryUsed * 100) / 100 + "MB", inline: true },
             { name: "Uptime", value: duration, inline: true },
-            { name: "Invite", value: `[URL](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=124992&scope=bot)`, inline: true },
-            { name: "Repositório", value: "[URL](https://github.com/jjoaovitor7/jjao-bot)", inline: true}
+            { name: "Invite", value: `[URL](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=2147609664&scope=bot)`, inline: true },
+            { name: "Repositório", value: "[URL](https://github.com/jjoaovitor7/jjao-bot)", inline: true }
           ).setFooter({ "text": `ID: ${client.user.id}` }).setTimestamp()
       ]
     });
@@ -115,37 +116,37 @@ class Utils {
           .addFields(
             {
               name: "Geral",
-              value: `\`\`\`jj avatar
-jj bitcoinprice [BRL | USD]
-jj botinfo | serverinfo
-jj countcommands
-jj discord
-jj help
-jj ping
+              value: `\`\`\`${prefix} avatar
+${prefix} bitcoinprice [BRL | USD]
+${prefix} botinfo | serverinfo
+${prefix} countcommands
+${prefix} discord
+${prefix} help
+${prefix} ping
 \`\`\`
 `,
               inline: true,
             },
             {
               name: "Entretenimento",
-              value: `\`\`\`jj avatar2pixel
-jj blackjack
-jj cookie
-jj jokenpo
-jj rndnote
-jj snake
-jj word2ascii
+              value: `\`\`\`${prefix} avatar2pixel
+${prefix} blackjack
+${prefix} cookie
+${prefix} jokenpo
+${prefix} rndnote
+${prefix} snake
+${prefix} word2ascii
 \`\`\`
 `,
               inline: true,
             },
             {
               name: "Leveling e Economia",
-              value: `\`\`\`jj coinsranking | xpranking
-jj daily | weekly | monthly
-jj setlevelingchannel | disablelevelingchannel
-jj profile | profilecard
-jj transfer
+              value: `\`\`\`${prefix} coinsranking | xpranking
+${prefix} daily | weekly | monthly
+${prefix} setlevelingchannel | disablelevelingchannel
+${prefix} profile | profilecard
+${prefix} transfer
 \`\`\`
 `,
             }
