@@ -55,7 +55,7 @@ client.on("ready", () => {
   client.user.setPresence({
     status: "online", // dnd, idle, online, invisible
     activities: [{
-      name: `${process.env.prefix} help | ${client.guilds.cache.size} ${word}`,
+      name: `${config.prefix} help | ${client.guilds.cache.size} ${word}`,
       type: "PLAYING"
     }]
   });
