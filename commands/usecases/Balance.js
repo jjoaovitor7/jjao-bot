@@ -16,10 +16,14 @@ class Balance {
     const guild = doc(database, "Guilds", message.guild.id);
     const member = doc(guild, "Members", message.author.id);
     const member_doc = await getDoc(member);
+    const user_data = member_doc.data() ?? {
+      money: 0,
+      daily: 0,
+      weekly: 0,
+      monthly: 0
+    };
 
-    let time = member_doc.data();
-    time = time[type];
-
+    const time = user_data[type];
     if (Date.now() < time) {
       moment.locale("pt-br");
       const duration = moment(time).format("lll");
@@ -37,19 +41,19 @@ class Balance {
       switch (type) {
         case "daily":
           updateDoc(member, {
-            money: member_doc.data().money + amount,
+            money: user_data.money + amount,
             daily: Date.now() + 86400000,
           });
           break;
         case "weekly":
           updateDoc(member, {
-            money: member_doc.data().money + amount,
+            money: user_data.money + amount,
             weekly: Date.now() + 604800000,
           });
           break;
         case "monthly":
           updateDoc(member, {
-            money: member_doc.data().money + amount,
+            money: user_data.money + amount,
             monthly: Date.now() + 2592000000,
           });
           break;
@@ -93,13 +97,15 @@ class Balance {
       const member_doc = await getDoc(member);
       const othermember = doc(guild, "Members", toTransfer.id);
       const othermember_doc = await getDoc(othermember);
+      const sender_data = member_doc.data() ?? { money: 0 };
+      const receiver_data = othermember_doc.data() ?? { money: 0 };
 
-      if (args[0] <= member_doc.data().money) {
+      if (args[0] <= sender_data.money) {
         updateDoc(member, {
-          money: member_doc.data().money - args[0],
+          money: sender_data.money - args[0],
         }).then(() => {
           updateDoc(othermember, {
-            money: othermember_doc.data().money + args[0],
+            money: receiver_data.money + args[0],
           }).then(() => {
             message.channel.send(
               `Transferência de \`${parseInt(

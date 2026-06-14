@@ -13,10 +13,11 @@ const client = new Client({
 });
 
 let interval = new Set();
-const _Leveling = require("discord-leveling-firebase");
-const Leveling = new _Leveling(client, config.firebase_config);
+const { db } = require("./infra/db/firebase");
+const Leveling = require("./commands/usecases/Leveling");
+const leveling = new Leveling(client, db);
 
-const { help } = require("./commands/Classes/Utils");
+const { help } = require("./commands/usecases/Utils");
 
 let countCommands = {
   avatar: 0,
@@ -101,14 +102,14 @@ client.on("messageCreate", async (message) => {
 
   if (!(interval.has(`${message.guild.id}${message.author.id}`))
     && message.content.startsWith(config.prefix)) {
-    Leveling.leveling(message);
+    leveling.leveling(message).catch(console.log);
     interval.add(message.guild.id.concat(message.author.id));
     setTimeout(() => interval.delete(message.guild.id.concat(message.author.id)), 5000);
   }
 
   if (message.content.startsWith(config.prefix)) {
     const command = require("./commands/command.js");
-    command(client, message, countCommands, Leveling);
+    command(client, message, countCommands, leveling);
   }
 });
 

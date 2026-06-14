@@ -1,19 +1,16 @@
-const { initializeApp } = require("firebase/app");
-const { getFirestore } = require("firebase/firestore");
-const config = require("../config.js");
-app = initializeApp(config.firebase_config);
-db = getFirestore(app);
+const config = require("../config");
+const { db } = require("../infra/db/firebase");
 
 module.exports = function command(client, message, countCommands, Leveling) {
     const command_filter = message.content.substr(3).split(" ");
     const command = command_filter[0];
     const args = command_filter.slice(1);
 
-    const Balance = require("./Classes/Balance");
-    const Fun = require("./Classes/Fun");
-    const Profile = require("./Classes/Profile");
-    const Utils = require("./Classes/Utils");
-    const WorldCup = require("./Classes/WorldCup");
+    const Balance = require("./usecases/Balance");
+    const Fun = require("./usecases/Fun");
+    const Profile = require("./usecases/Profile");
+    const Utils = require("./usecases/Utils");
+    const WorldCup = require("./usecases/WorldCup");
 
     let commands = {
         // GERAL

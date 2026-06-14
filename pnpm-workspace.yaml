@@ -1,0 +1,32 @@
+allowBuilds:
+  '@firebase/util': set this to true or false
+  canvacord: true
+  midi-writer-js: set this to true or false
+  protobufjs: set this to true or false
+minimumReleaseAgeExclude:
+  - '@grpc/grpc-js@1.8.22'
+  - firebase@10.9.0
+  - protobufjs@7.5.5
+  - protobufjs@7.5.6
+  - protobufjs@7.5.8
+  - pm2@7.0.0
+  - '@grpc/grpc-js@1.9.16'
+  - undici@6.21.1
+  - undici@6.23.0
+  - undici@6.21.2
+  - undici@6.24.0
+  - ws@8.20.1
+overrides:
+  '@grpc/grpc-js@<1.8.22': ^1.8.22
+  '@grpc/grpc-js@<1.9.16': ^1.9.16
+  firebase@<10.9.0: ^10.9.0
+  pm2@<7.0.0: ^7.0.0
+  protobufjs@<7.5.5: ^7.5.5
+  protobufjs@<=7.5.5: ^7.5.6
+  protobufjs@<=7.5.7: ^7.5.8
+  undici@<6.23.0: ^6.23.0
+  undici@<6.24.0: ^6.24.0
+  undici@>=6.0.0 <6.21.1: ^6.21.1
+  undici@>=6.0.0 <6.21.2: ^6.21.2
+  undici@>=6.0.0 <6.24.0: ^6.24.0
+  ws@>=8.0.0 <8.20.1: ^8.20.1

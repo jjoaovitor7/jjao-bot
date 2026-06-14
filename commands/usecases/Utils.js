@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const axios = require("axios");
 const QuickChart = require("quickchart-js");
 const moment = require("moment");
 const { prefix } = require("../../config");
@@ -22,17 +21,17 @@ class Utils {
         break;
     }
 
-    axios
-      .get("https://blockchain.info/ticker")
-      .then((response) => {
+    fetch("https://blockchain.info/ticker")
+      .then((response) => response.json())
+      .then((data) => {
         message.channel.send({
           embeds: [
             new MessageEmbed()
               .setTitle(":moneybag: Preço do Bitcoin")
-              .setDescription(`${currency[1]} ${response.data[currency[0]].buy}`)
+              .setDescription(`${currency[1]} ${data[currency[0]].buy}`)
               .setFooter({ "text": "https://blockchain.info/ticker" })]
         });
-      }).catch(console.error);
+      }).catch(console.log);
   }
 
   botinfo(client, message) {

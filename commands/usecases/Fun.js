@@ -52,21 +52,19 @@ class Fun {
   }
 
   cookie(message) {
-    const axios = require("axios");
-
-    axios
-      .get("https://helloacm.com/api/fortune/")
-      .then(function (response) {
+    fetch("https://helloacm.com/api/fortune/")
+      .then((response) => response.text())
+      .then((data) => {
         message.channel.send({
           embeds: [
             new MessageEmbed()
-              .setDescription(`:fortune_cookie: Biscoito da Sorte (em inglês)\n ${response.data}`)
+              .setDescription(`:fortune_cookie: Biscoito da Sorte (em inglês)\n ${data}`)
               .setFooter({ "text": "https://helloacm.com/api/fortune/" })
           ]
         });
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -109,9 +107,10 @@ Você perdeu \`${random} coins\`!`);
             const guild = doc(database, "Guilds", message.guild.id);
             const user = doc(guild, "Members", message.author.id);
             const user_doc = await getDoc(user);
+            const user_data = user_doc.data() ?? { money: 0 };
 
             updateDoc(user, {
-              money: user_doc.data().money - random
+              money: user_data.money - random
             });
           } else if (r.player === true) {
             let random = Math.floor(Math.random() * 11 + 1);
@@ -121,9 +120,10 @@ Você ganhou \`${random} coins\`!`);
             const guild = doc(database, "Guilds", message.guild.id);
             const user = doc(guild, "Members", message.author.id);
             const user_doc = await getDoc(user);
+            const user_data = user_doc.data() ?? { money: 0 };
 
             updateDoc(user, {
-              money: user_doc.data().money + random
+              money: user_data.money + random
             });
           }
         } else {
@@ -137,7 +137,7 @@ Você ganhou \`${random} coins\`!`);
           }
         }
       }
-    }).catch(console.error);
+    }).catch(console.log);
   }
 
   async snake(message) {
