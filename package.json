@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "ascii-art-font": "^1.0.2",
-    "canvacord": "^5.4.10",
+    "canvacord": "^6.0.4",
     "discord-blackjack": "^4.0.0",
     "discord-jokenpo": "^1.6.65",
     "discord.js": "^13.17.1",

@@ -1,7 +1,4 @@
-const os = require("os");
-const canvacord = require("canvacord");
-const toAbbrev = require("canvacord/src/Util").toAbbrev;
-const { createRequire } = require("module");
+const { Font, RankCardBuilder } = require("canvacord");
 
 const { MessageEmbed, MessageAttachment } = require("discord.js");
 const { doc, getDoc } = require("firebase/firestore");
@@ -77,55 +74,40 @@ class Profile {
   }
 
   async profilecard(database, message) {
-   process.env.CANVACORD_ASSETS = os.tmpdir();
-   const Canvas = createRequire(require.resolve("canvacord"))("@napi-rs/canvas");
-
     const data = await this.#getUser(database, message.guild.id, message.author.id);
     const xp = data.xp;
     const level = data.level;
     const coins = data.money;
 
-    const levelLabel = "Level";
-    const currencyLabel = "Saldo";
-    const levelVal = toAbbrev(level);
-    const currencyVal = toAbbrev(coins);
+    Font.loadDefault();
 
-    const rankCard = new canvacord.Rank()
+    const rankCard = new RankCardBuilder()
+      .setDisplayName(message.author.username)
       .setAvatar(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=1024`)
       .setCurrentXP(xp)
       .setRequiredXP((level + 1) * 100)
-      .setLevel(level, levelLabel, false)
-      .setRank(coins, currencyLabel, false)
-      .setProgressBar("#fff", "COLOR")
-      .setUsername(message.author.username);
+      .setLevel(level)
+      .setBackground("#23272A")
+      .setOverlay(50)
+      .setTextStyles({
+        level: "Level",
+        xp: "XP",
+      })
+      .setStyles({
+        progressbar: {
+          thumb: { style: { backgroundColor: "#fff" } },
+        },
+        statistics: {
+          container: { tw: "flex-col" },
+        },
+      });
 
-    const card = await rankCard.build();
+    if (coins > 0) {
+      rankCard.setUsername(`Saldo: ${coins}`);
+    }
 
-    const ow = rankCard.data.width, oh = rankCard.data.height;
-    const src = await Canvas.loadImage(card);
-    const full = Canvas.createCanvas(ow, oh);
-    const fctx = full.getContext("2d");
-    fctx.drawImage(src, 0, 0);
-
-    fctx.font = `bold 28px`;
-    const labelWidth = fctx.measureText(levelLabel).width;
-    const valWidth = fctx.measureText(levelVal).width;
-    const levelX = ow - ((labelWidth + valWidth) * 4.32);
-
-    const rankX = levelX + labelWidth + valWidth + 42;
-
-    fctx.textAlign = "start";
-    fctx.fillStyle = rankCard.data.level.textColor;
-    fctx.fillText(levelLabel, levelX, 82);
-    fctx.fillText(levelVal, levelX, 128);
-
-    fctx.font = `bold 28px`;
-    fctx.fillStyle = rankCard.data.rank.color;
-    fctx.fillText(currencyLabel, rankX, 82);
-    fctx.fillText(currencyVal, rankX, 128);
-
-    const final = await full.encode("png");
-    const attachment = new MessageAttachment(final, "rank.png");
+    const card = await rankCard.build({ format: "png" });
+    const attachment = new MessageAttachment(card, "rank.png");
     message.channel.send({ files: [attachment] });
   }
 }

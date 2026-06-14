@@ -50,7 +50,9 @@ class Utils {
             { name: "Uso de memória", value: Math.round(memoryUsed * 100) / 100 + "MB", inline: true },
             { name: "Uptime", value: duration, inline: true },
             { name: "Invite", value: `[URL](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=2147609664&scope=bot)`, inline: true },
-            { name: "Repositório", value: "[URL](https://github.com/jjoaovitor7/jjao-bot)", inline: true }
+            { name: "Repositório", value: "[URL](https://github.com/jjoaovitor7/jjao-bot)", inline: true },
+            { name: "Doação", value: "[Ko-fi](https://ko-fi.com/jjoaovitor7)", inline: true },
+            { name: "\u200b", value: "\u200b", inline: true }
           ).setFooter({ "text": `ID: ${client.user.id}` }).setTimestamp()
       ]
     });
@@ -112,6 +114,9 @@ class Utils {
         new MessageEmbed()
           .setColor("#0099ff")
           .setTitle("Comandos")
+          .setFooter({
+            "text": "É possível apoiar em https://ko-fi.com/jjoaovitor7 =)"
+          })
           .addFields(
             {
               name: "Geral",
