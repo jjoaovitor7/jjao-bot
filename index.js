@@ -28,6 +28,7 @@ let countCommands = {
   help: 0,
   ping: 0,
   serverinfo: 0,
+  worldcup: 0,
 
   // LEVELING E ECONOMIA
   coinsranking: 0,

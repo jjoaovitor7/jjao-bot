@@ -123,6 +123,7 @@ ${prefix} countcommands
 ${prefix} discord
 ${prefix} help
 ${prefix} ping
+${prefix} worldcup [group | team]
 \`\`\`
 `,
               inline: true,

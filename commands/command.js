@@ -13,6 +13,7 @@ module.exports = function command(client, message, countCommands, Leveling) {
     const Fun = require("./Classes/Fun");
     const Profile = require("./Classes/Profile");
     const Utils = require("./Classes/Utils");
+    const WorldCup = require("./Classes/WorldCup");
 
     let commands = {
         // GERAL
@@ -24,6 +25,7 @@ module.exports = function command(client, message, countCommands, Leveling) {
         help: () => Utils.help(message),
         ping: () => Utils.ping(client, message),
         serverinfo: () => Utils.serverinfo(message),
+        worldcup: () => WorldCup.worldcup(message, args),
 
         // LEVELING E ECONOMIA
         coinsranking: () => Balance.moneyranking(db, message),
