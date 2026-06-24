@@ -1,29 +1,32 @@
 {
   "name": "jjao-bot",
-  "version": "2.0.0",
-  "description": "jjao Discord bot",
-  "main": "index.js",
+  "version": "4.0.0",
+  "description": "jjao Discord bot.",
+  "main": "index.ts",
   "engines": {
     "node": ">=18"
   },
   "scripts": {
-    "start": "env TZ='America/Bahia' pm2 start index.js",
-    "build": "echo 'skipping...'",
-    "dev": "env TZ='America/Bahia' nodemon index.js"
+    "start": "env TZ='America/Bahia' pm2 start dist/index.js",
+    "build": "tsc",
+    "dev": "env TZ='America/Bahia' tsx watch index.ts"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14",
-    "pm2": "^7.0.1"
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.0.0",
+    "pm2": "^7.0.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "ascii-art-font": "^1.0.2",
     "canvacord": "^6.0.4",
     "discord-blackjack": "^4.0.0",
     "discord-jokenpo": "^1.6.65",
-    "discord.js": "^13.17.1",
+    "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
     "express": "^4.22.2",
-    "firebase": "^12.14.0",
+    "firebase": "^12.15.0",
     "midi-writer-js": "^3.2.1",
     "moment": "^2.30.1",
     "moment-duration-format": "^2.3.2",
